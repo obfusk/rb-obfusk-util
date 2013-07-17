@@ -49,12 +49,12 @@ module Obfusk; module Util
 
   # Term.colour
   def self._tcol(*a)
-    Term.colour(*a)
+    Term.colour *a
   end
 
   # Term.colour_e
   def self._tcole(*a)
-    Term.colour_e(*a)
+    Term.colour_e *a
   end
 
 end; end
