@@ -11,6 +11,7 @@
 
 require 'obfusk/util/data'
 require 'obfusk/util/fs'
+require 'obfusk/util/message'
 require 'obfusk/util/misc'
 require 'obfusk/util/module'
 require 'obfusk/util/os'
