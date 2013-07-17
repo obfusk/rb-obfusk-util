@@ -62,6 +62,15 @@ module Obfusk; module Util
 
   # --
 
+  # @raise RunError if Process::Status's exitcode is non-zero
+  def chk_exit(args, status)
+    c = status.exitcode
+    raise RunError, "command returned non-zero: #{args} -> #{s}" \
+      if c != 0
+  end
+
+  # --
+
   # helper
   def self._enoent_to_run(what, args, &b)                       # {{{1
     begin
