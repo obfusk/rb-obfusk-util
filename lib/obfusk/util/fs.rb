@@ -9,6 +9,8 @@
 #
 # --                                                            ; }}}1
 
+require 'fileutils'
+
 module Obfusk; module Util; module FS
 
   # append to file
@@ -19,6 +21,12 @@ module Obfusk; module Util; module FS
   # does file/dir or symlink exists?
   def self.exists?(path)
     File.exists?(path) || File.symlink?(path)
+  end
+
+  # ohai + mkdir_p; requires obfusk/util/message
+  def self.omkdir_p(*paths)
+    ::Obfusk::Util.ohai "mkdir -p #{paths*' '}"
+    FileUtils.mkdir_p paths
   end
 
 end; end; end

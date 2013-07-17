@@ -23,6 +23,13 @@ module Obfusk; module Util; module OS
     Etc.getlogin
   end
 
+  # --
+
+  # current time ('%F %T')
+  def self.now(fmt = '%F %T')
+    Time.now.strftime fmt
+  end
+
 end; end; end
 
 # vim: set tw=70 sw=2 sts=2 et fdm=marker :
