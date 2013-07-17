@@ -20,6 +20,8 @@ module Obfusk; module Util; module Term
     whi:  "\e[1;37m",
   }                                                             # }}}1
 
+  GET_COLS = 'TERM=${TERM:-dumb} tput cols'
+
   # --
 
   # colour code (or '' if not tty)
@@ -36,12 +38,22 @@ module Obfusk; module Util; module Term
 
   # terminal columns
   def self.columns
-    %x[ TERM=${TERM:-dumb} tput cols ].to_i
+    %x[#{GET_COLS}].to_i
   end
 
   # is STDOUT (or STDERR) a tty?
   def self.tty?(what = :out)
     (what == :out ? STDOUT : STDERR).isatty
+  end
+
+  # --
+
+  # prompt for line; optionally hide input
+  def self.prompt(prompt, hide = false)
+    print prompt; STDOUT.flush
+    line = hide ? STDIN.noecho { |i| i.gets } .tap { puts } :
+                  STDIN.gets
+    line && line.chomp
   end
 
 end; end; end
