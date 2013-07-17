@@ -36,8 +36,8 @@ module Obfusk; module Util
   end
 
   # warning message (onoe w/ label 'Warning')
-  def self.opoo(msg)
-    onoe msg, label: 'Warning'
+  def self.opoo(msg, opts = {})
+    onoe msg, opts.merge(label: 'Warning')
   end
 
   # --

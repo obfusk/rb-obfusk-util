@@ -10,6 +10,7 @@
 # --                                                            ; }}}1
 
 require 'obfusk/util/data'
+require 'obfusk/util/die'
 require 'obfusk/util/fs'
 require 'obfusk/util/message'
 require 'obfusk/util/misc'
