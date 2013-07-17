@@ -47,14 +47,14 @@ module Obfusk; module Util
     ': ' + what.map { |x| _tcol(:grn) + x + _tcol(:non) } *', '
   end
 
-  # Term.colours
+  # Term.colour
   def self._tcol(*a)
-    Term.colours(*a)
+    Term.colour(*a)
   end
 
-  # Term.colours_e
+  # Term.colour_e
   def self._tcole(*a)
-    Term.colours_e(*a)
+    Term.colour_e(*a)
   end
 
 end; end

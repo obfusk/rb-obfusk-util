@@ -21,7 +21,7 @@ module Obfusk; module Util; module Cmd
   # returns { command: command, signal: signal };
   # if there is no prefix, signal is SIGTERM
   def self.killsig(cmd)                                         # {{{1
-    if m = cmd.match SIG_RX
+    if m = cmd.match(SIG_RX)
       { command: cmd.sub(r, ''), signal: m[1] }
     else
       { command: cmd, signal: 'SIGTERM' }

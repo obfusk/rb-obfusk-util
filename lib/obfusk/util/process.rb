@@ -11,7 +11,7 @@
 
 module Obfusk; module Util; module Process
 
-  GET_AGE = ->(pid) -> { "ps -p #{pid} -o etime=" }
+  GET_AGE = ->(pid) { "ps -p #{pid} -o etime=" }
 
   # --
 
@@ -22,7 +22,7 @@ module Obfusk; module Util; module Process
 
   # process alive? returns false/true/:not_mine
   def self.alive?(pid)
-    Process.kill 0, pid; true
+    ::Process.kill 0, pid; true
   rescue Errno::EPERM; :not_mine
   rescue Errno::ESRCH; false
   end

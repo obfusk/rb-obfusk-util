@@ -37,15 +37,15 @@ module Obfusk; module Util
 
   # better system: spawn + wait; returns $?; see exec, spawn, system
   def self.spawn_w(*args)
-    pid = spawn(*args); Process.wait pid; $?
+    pid = spawn(*args); ::Process.wait pid; $?
   end
 
-  # better Kernel.system; returns true/false/nil;
-  # see exec, spawn, spawn_w
-  # @raise RunError on failure
+  # better Kernel.system; returns true/false; see exec, spawn, spawn_w
+  # @raise RunError on failure (Kernel.system -> nil)
   def self.system(*args)
-    Kernel.system *_spawn_args(*args) or raise RunError,
-      "failed to run command #{args} (#$?)"
+    r = Kernel.system *_spawn_args(*args)
+    raise RunError, "failed to run command #{args} (#$?)" if r.nil?
+    r
   end
 
   # --
@@ -75,7 +75,8 @@ module Obfusk; module Util
   # helper
   def self._spawn_args(cmd, *args)                              # {{{1
     c = [cmd, cmd]
-    if (l = args.last.dup).is_a?(Hash) && e = l.delete(:env)
+    if args.last && (l = args.last.dup).is_a?(Hash) \
+                 && e = l.delete(:env)
       [e, c] + args[0..-2] + [l]
     else
       [c] + args

@@ -21,7 +21,7 @@ require 'obfusk/util/process'
 require 'obfusk/util/run'
 require 'obfusk/util/struct'
 require 'obfusk/util/term'
+require 'obfusk/util/valid'
 require 'obfusk/util/version'
-# ...
 
 # vim: set tw=70 sw=2 sts=2 et fdm=marker :
