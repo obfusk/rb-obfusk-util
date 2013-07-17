@@ -9,8 +9,10 @@
 #
 # --                                                            ; }}}1
 
+require 'obfusk/util/data'
 require 'obfusk/util/misc'
 require 'obfusk/util/module'
+require 'obfusk/util/os'
 require 'obfusk/util/struct'
 require 'obfusk/util/term'
 require 'obfusk/util/version'

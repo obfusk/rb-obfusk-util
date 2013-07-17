@@ -9,7 +9,7 @@
 #
 # --                                                            ; }}}1
 
-module Obfusk; module Util
+module Obfusk; module Util; module Term
 
   # some ansi escape colours                                      TODO
   TERM_COLOURS = {                                              # {{{1
@@ -23,27 +23,27 @@ module Obfusk; module Util
   # --
 
   # colour code (or '' if not tty)
-  def self.term_colour(x, what = :out)
-    term_tty?(what) ? TERM_COLOURS.fetch(x) : ''
+  def self.colour(x, what = :out)
+    tty?(what) ? TERM_COLOURS.fetch(x) : ''
   end
 
   # colour code for STDERR
-  def self.term_colour_e(x)
-    term_col x, :err
+  def self.colour_e(x)
+    colour x, :err
   end
 
   # --
 
   # terminal columns
-  def self.term_columns
+  def self.columns
     %x[ TERM=${TERM:-dumb} tput cols ].to_i
   end
 
   # is STDOUT (or STDERR) a tty?
-  def self.term_tty?(what = :out)
+  def self.tty?(what = :out)
     (what == :out ? STDOUT : STDERR).isatty
   end
 
-end; end
+end; end; end
 
 # vim: set tw=70 sw=2 sts=2 et fdm=marker :

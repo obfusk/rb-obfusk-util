@@ -1,6 +1,6 @@
 # --                                                            ; {{{1
 #
-# File        : obfusk/util/misc.rb
+# File        : obfusk/util/os.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
 # Date        : 2013-07-17
 #
@@ -9,10 +9,18 @@
 #
 # --                                                            ; }}}1
 
-module Obfusk; module Util
+module Obfusk; module Util; module OS
 
-  # ...
+  # home dir of (current) user
+  def self.home(user = nil)
+    user ? Etc.getpwnam(user).dir : Dir.home
+  end
 
-end; end
+  # user name
+  def self.user
+    Etc.getlogin
+  end
+
+end; end; end
 
 # vim: set tw=70 sw=2 sts=2 et fdm=marker :
