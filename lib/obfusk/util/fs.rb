@@ -1,6 +1,6 @@
 # --                                                            ; {{{1
 #
-# File        : obfusk/util/all.rb
+# File        : obfusk/util/fs.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
 # Date        : 2013-07-17
 #
@@ -9,14 +9,18 @@
 #
 # --                                                            ; }}}1
 
-require 'obfusk/util/data'
-require 'obfusk/util/fs'
-require 'obfusk/util/misc'
-require 'obfusk/util/module'
-require 'obfusk/util/os'
-require 'obfusk/util/struct'
-require 'obfusk/util/term'
-require 'obfusk/util/version'
-# ...
+module Obfusk; module Util; module FS
+
+  # append to file
+  def self.append(file, *lines)
+    File.open(file, 'a') { |f| puts lines }
+  end
+
+  # does file/dir or symlink exists?
+  def self.exists?(path)
+    File.exists?(path) || File.symlink?(path)
+  end
+
+end; end; end
 
 # vim: set tw=70 sw=2 sts=2 et fdm=marker :
