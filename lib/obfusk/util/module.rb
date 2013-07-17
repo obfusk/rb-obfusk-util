@@ -12,11 +12,12 @@
 module Obfusk; module Util
 
   # load <dir>/* (by searching for <dir>/*.rb in $LOAD_PATH)
-  # e.g. require_all('napp/types') ~> require 'napp/types/*'
+  # e.g. require_all('napp/types') ~> require 'napp/types/*';
+  # returns hash of module => result-of-require
   def self.require_all(dir)
-    $LOAD_PATH.map { |x| Dir["#{x}/#{dir}/*.rb"] } .flatten \
-      .map { |x| "#{dir}/" + File.basename(x, '.rb') } .uniq \
-      .each { |x| require x }
+    Hash[ $LOAD_PATH.map { |x| Dir["#{x}/#{dir}/*.rb"] } .flatten \
+            .map { |x| "#{dir}/" + File.basename(x, '.rb') } .uniq \
+            .map { |x| y = require x; [x,y] } ]
   end
 
   # get submodules as hash

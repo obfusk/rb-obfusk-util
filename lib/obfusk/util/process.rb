@@ -17,7 +17,7 @@ module Obfusk; module Util; module Process
 
   # get process age information from ps
   def self.age(pid)
-    ispid! pid; %x[#{GET_AGE}].gsub(/\s/, '')
+    ispid! pid; %x[#{GET_AGE[pid]}].gsub(/\s/, '')
   end
 
   # process alive? returns false/true/:not_mine

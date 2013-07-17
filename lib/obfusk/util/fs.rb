@@ -13,7 +13,7 @@ module Obfusk; module Util; module FS
 
   # append to file
   def self.append(file, *lines)
-    File.open(file, 'a') { |f| puts lines }
+    File.open(file, 'a') { |f| f.puts lines }
   end
 
   # does file/dir or symlink exists?

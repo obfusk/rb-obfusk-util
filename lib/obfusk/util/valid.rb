@@ -11,6 +11,7 @@
 
 module Obfusk; module Util; module Valid
 
+  class ArgumentError < RuntimeError; end
   class ValidationError < RuntimeError; end
 
   # --
@@ -18,9 +19,9 @@ module Obfusk; module Util; module Valid
   # validate #args in min..max (min.. if max=nil); returns args
   # @raise ArgError on out of bounds
   def self.args(what, args, min, max = min)
-    if args.length < min || (max && args.length > max)
-      raise ArgError, "#{what} expected #{min}..#{max} arguments" +
-                      ", got #{args.length}"
+    if (l = args.length) < min || (max && l > max)
+      raise ArgumentError,
+        "#{what} expected #{min}..#{max} arguments, got #{l}"
     end; args
   end
 
