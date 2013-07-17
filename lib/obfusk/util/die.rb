@@ -26,7 +26,8 @@ module Obfusk; module Util
 
   # onoe, exit; requires obfusk/util/message
   def self.odie(msg, opts = {})
-    o = opts.dup; c = o.delete(:code) || 1; onoe msg, o; exit c
+    o = opts.dup; c = o.delete(:code) || 1
+    ::Obfusk::Util.onoe msg, o; exit c
   end
 
   # --
