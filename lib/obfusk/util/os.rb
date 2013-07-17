@@ -9,6 +9,8 @@
 #
 # --                                                            ; }}}1
 
+require 'etc'
+
 module Obfusk; module Util; module OS
 
   # home dir of (current) user

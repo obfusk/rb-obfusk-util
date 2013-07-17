@@ -9,6 +9,8 @@
 #
 # --                                                            ; }}}1
 
+require 'io/console'
+
 module Obfusk; module Util; module Term
 
   # some ansi escape colours                                      TODO
