@@ -25,7 +25,7 @@ module Obfusk; module Util
 
       # new, block, freeze, return
       def build(h = {}, &b)
-        x = new h; b[x]; x.freeze
+        x = new h; b[x] if b; x.freeze
       end
 
     end                                                         # }}}2
