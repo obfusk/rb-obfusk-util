@@ -9,6 +9,7 @@
 #
 # --                                                            ; }}}1
 
+require 'obfusk/util/cmd'
 require 'obfusk/util/data'
 require 'obfusk/util/die'
 require 'obfusk/util/fs'
