@@ -12,6 +12,7 @@
 require 'obfusk/util/misc'
 require 'obfusk/util/module'
 require 'obfusk/util/struct'
+require 'obfusk/util/term'
 require 'obfusk/util/version'
 # ...
 
