@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/cmd.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-17
+# Date        : 2013-07-18
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -11,8 +11,9 @@
 
 module Obfusk; module Util; module Cmd
 
-  SIG_RX = /^(SIG[A-Z0-9]+)\s+/
-  VAR_RX = / \$ \{ ([A-Z_]+) \} /x
+  SIG_RX  = /^(SIG[A-Z0-9]+)\s+(.*)$/
+  SH_RX   = /^SHELL(=(\S+))?\s+(.*)$/
+  VAR_RX  = / \$ \{ ([A-Z_]+) \} /x
 
   # --
 
@@ -22,11 +23,26 @@ module Obfusk; module Util; module Cmd
   # if there is no prefix, signal is SIGTERM
   def self.killsig(cmd)                                         # {{{1
     if m = cmd.match(SIG_RX)
-      { command: cmd.sub(SIG_RX, ''), signal: m[1] }
+      { command: m[2], signal: m[1] }
     else
       { command: cmd, signal: 'SIGTERM' }
     end
   end                                                           # }}}1
+
+  # parses optional SHELL[=...] prefix in command string
+  # (e.g. 'SHELL=bash foo bar ...', 'SHELL foo bar ...');
+  # returns { command: command, shell: shell };
+  # if there is no prefix, shell is nil;
+  # if there is no =..., shell is default
+  def self.shell(cmd, default = 'bash')                         # {{{1
+    if m = cmd.match(SH_RX)
+      { command: m[3], shell: (m[2] || default) }
+    else
+      { command: cmd, shell: nil }
+    end
+  end                                                           # }}}1
+
+  # --
 
   # prepend nohup to args
   def self.nohup(*args)
