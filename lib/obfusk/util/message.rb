@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/message.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-17
+# Date        : 2013-07-21
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -15,12 +15,12 @@ module Obfusk; module Util
 
   # info message; "==> <msg>" w/ colours
   def self.ohai(msg)
-    puts _tcol(:blu) + '==> ' + _tcol(:whi) + msg + _tcol(:non)
+    puts _tcol(:lbl) + '==> ' + _tcol(:whi) + msg + _tcol(:non)
   end
 
   # info message; "==> <msg>: <a>[, <b>, ...]" w/ colours
   def self.onow(msg, *what)
-    puts _tcol(:grn) + '==> ' + _tcol(:whi) + msg + _tcol(:non) +
+    puts _tcol(:lgn) + '==> ' + _tcol(:whi) + msg + _tcol(:non) +
       (what.empty? ? '' : _owhat(what))
   end
 
@@ -31,7 +31,7 @@ module Obfusk; module Util
   # set opts[:log] to a lambda to pass message on to a logger
   def self.onoe(msg, opts = {})
     l = opts[:label] || 'Error'
-    STDERR.puts _tcole(:red) + l + _tcole(:non) + ': ' + msg
+    STDERR.puts _tcole(:lrd) + l + _tcole(:non) + ': ' + msg
     opts[:log]["#{l}: #{msg}"] if opts[:log]
   end
 
@@ -44,7 +44,7 @@ module Obfusk; module Util
 
   # (helper for onow)
   def self._owhat(what)
-    ': ' + what.map { |x| _tcol(:grn) + x + _tcol(:non) } *', '
+    ': ' + what.map { |x| _tcol(:lgn) + x + _tcol(:non) } *', '
   end
 
   # Term.colour
