@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/all.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-17
+# Date        : 2013-07-22
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -16,6 +16,7 @@ require 'obfusk/util/fs'
 require 'obfusk/util/message'
 require 'obfusk/util/misc'
 require 'obfusk/util/module'
+require 'obfusk/util/opt'
 require 'obfusk/util/os'
 require 'obfusk/util/process'
 require 'obfusk/util/run'

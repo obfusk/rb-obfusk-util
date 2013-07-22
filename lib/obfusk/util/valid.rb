@@ -36,27 +36,6 @@ module Obfusk; module Util; module Valid
     x.to_s.match /^(#{rx})$/ or invalid! "invalid #{name}"
   end
 
-  # --
-
-  # disable optparse's officious options
-  def self.disable_optparse_officious(o, what = nil)
-    (what || OptionParser::Officious.keys).each do |x|
-      o.on("--#{x}") { raise OptionParser::InvalidOption }
-    end
-  end
-
-  # clean OptionParser
-  def self.optparse_clean(*args, &b)
-    OptionParser.new(*args) do |o|
-      disable_optparse_officious o; b[o] if b
-    end
-  end
-
-  # parse options, return remaining args; assumes optparse's .parse!
-  def self.parse_opts(op, args)
-    as = args.dup; op.parse! as; as
-  end
-
 end; end; end
 
 # vim: set tw=70 sw=2 sts=2 et fdm=marker :
