@@ -20,7 +20,7 @@ module Obfusk; module Util; module Opt
 
     # parse options, return remaining args
     def parse_r(args)
-      as = args.dup; super args; as
+      as = args.dup; parse! as; as
     end
   end
 
