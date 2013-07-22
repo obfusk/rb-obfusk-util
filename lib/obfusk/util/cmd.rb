@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/cmd.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-18
+# Date        : 2013-07-22
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -52,6 +52,13 @@ module Obfusk; module Util; module Cmd
   # replaces ${VAR}s in command string using vars hash
   def self.set_vars(cmd, vars)
     cmd.gsub(VAR_RX) { |m| vars[$1] }
+  end
+
+  # --
+
+  # env hash as array of ['k1="v1"', ...] w/o nil values
+  def self.env_to_a(h)
+    h.reject { |k,v| v.nil? } .map { |k,v| "#{k}=#{v.inspect}" }
   end
 
 end; end; end
