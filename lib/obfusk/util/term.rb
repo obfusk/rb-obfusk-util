@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/term.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-21
+# Date        : 2013-07-23
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -44,7 +44,8 @@ module Obfusk; module Util; module Term
     a.merge b
   })[]
 
-  GET_COLS = 'TERM=${TERM:-dumb} tput cols'
+  GET_COLS  = 'TERM=${TERM:-dumb} tput cols'
+  GET_LINES = 'TERM=${TERM:-dumb} tput lines'
 
   # --
 
@@ -63,6 +64,11 @@ module Obfusk; module Util; module Term
   # terminal columns
   def self.columns
     %x[#{GET_COLS}].to_i
+  end
+
+  # terminal lines
+  def self.lines
+    %x[#{GET_LINES}].to_i
   end
 
   # is STDOUT (or STDERR) a tty?
