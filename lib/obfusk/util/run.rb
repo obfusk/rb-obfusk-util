@@ -56,7 +56,7 @@ module Obfusk; module Util
   # @raise RunError on ENOENT
   def self.popen3(*args, &b)
     _enoent_to_run('popen3', args) do |a|
-      Open3.popen3 *_spawn_args(*a, &b)
+      Open3.popen3 *_spawn_args(*a), &b
     end
   end
 
