@@ -82,7 +82,7 @@ module Obfusk; module Util
 
   # @raise RunError if c != 0
   def self.chk_exitstatus(args, c)
-    exit_non_zero args, c if c != 0
+    exit_non_zero! args, c if c != 0
   end
 
   # @raise RunError command returned non-zero
