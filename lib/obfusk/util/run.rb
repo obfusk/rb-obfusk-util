@@ -2,12 +2,14 @@
 #
 # File        : obfusk/util/run.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-17
+# Date        : 2013-07-23
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
 #
 # --                                                            ; }}}1
+
+require 'open3'
 
 module Obfusk; module Util
 
@@ -16,7 +18,7 @@ module Obfusk; module Util
   # --
 
   # better Kernel.exec; should never return (if successful);
-  # see spawn, spawn_w, system;
+  # see spawn, spawn_w, system
   # @raise RunError on ENOENT
   def self.exec(*args)
     _enoent_to_run('exec', args) do |a|
@@ -50,6 +52,16 @@ module Obfusk; module Util
 
   # --
 
+  # better Open3.popen3; see exec, spawn, spawn_w, system
+  # @raise RunError on ENOENT
+  def self.popen3(*args, &b)
+    _enoent_to_run('popen3', args) do |a|
+      Open3.popen3 *_spawn_args(*a, &b)
+    end
+  end
+
+  # --
+
   # ohai + spawn; requires obfusk/util/message
   def self.ospawn(*args)
     ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; spawn *args
@@ -62,12 +74,20 @@ module Obfusk; module Util
 
   # --
 
-  # run block w/ args, check exitstatus
+  # run block w/ args, check .exitstatus
   # @raise RunError if Process::Status's exitstatus is non-zero
   def self.chk_exit(args, &b)
-    c = b[args].exitstatus
-    raise RunError, "command returned non-zero: #{args} -> #{s}" \
-      if c != 0
+    chk_exitstatus args, b[args].exitstatus
+  end
+
+  # @raise RunError if c != 0
+  def self.chk_exitstatus(args, c)
+    exit_non_zero args, c if c != 0
+  end
+
+  # @raise RunError command returned non-zero
+  def self.exit_non_zero!(args, c)
+    raise RunError, "command returned non-zero: #{args} -> #{c}"
   end
 
   # --
