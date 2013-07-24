@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/cmd.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-22
+# Date        : 2013-07-24
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -20,12 +20,12 @@ module Obfusk; module Util; module Cmd
   # parses optional SIG* prefix in command string
   # (e.g. 'SIGINT foo bar ...');
   # returns { command: command, signal: signal };
-  # if there is no prefix, signal is SIGTERM
-  def self.killsig(cmd)                                         # {{{1
+  # if there is no prefix, signal is default
+  def self.killsig(cmd, default = 'SIGTERM')                    # {{{1
     if m = cmd.match(SIG_RX)
       { command: m[2], signal: m[1] }
     else
-      { command: cmd, signal: 'SIGTERM' }
+      { command: cmd, signal: default }
     end
   end                                                           # }}}1
 
