@@ -33,7 +33,7 @@ Obfusk::Util::Cmd.killsig 'foo bar'
 Obfusk::Util::Cmd.shell 'SHELL echo "$FOO: $BAR"'
 # => { command: 'echo "$FOO: $BAR"', shell: 'bash' }
 
-Obfusk::Util::Cmd.set_vars 'echo FOO ... BAR ...',
+Obfusk::Util::Cmd.set_vars 'echo ${FOO} ... ${BAR} ...',
   { 'FOO' => 'foo', 'BAR' => 'bar' }
 # => 'echo foo ... bar ...'
 ```

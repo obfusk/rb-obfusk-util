@@ -50,7 +50,8 @@ module Obfusk; module Util; module Cmd
     ['nohup'] + args
   end
 
-  # replaces `${VAR}s` in command string using vars hash
+  # replaces `${VAR}s` in command string using vars hash;
+  # missing values are replaced with empty strings
   def self.set_vars(cmd, vars)
     cmd.gsub(VAR_RX) { |m| vars[$1] }
   end
