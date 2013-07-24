@@ -41,7 +41,7 @@ describe 'obfusk/util/process' do
       pr.alive?(pid).should == false
     end
     it 'not mine' do
-      pr.alive?(1).should == :not_mine  # init should be alive
+      pr.alive?(1).should == :not_mine  # init should be alive  # ????
     end
   end                                                           # }}}1
 
