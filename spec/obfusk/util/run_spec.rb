@@ -97,8 +97,7 @@ describe 'obfusk/util/run' do
   context 'ospawn' do                                            # {{{1
     it 'colour' do
       r, w = IO.pipe
-      ou.capture_stdout do
-        def $stdout.isatty; true; end
+      ou.capture_stdout(:tty) do
         pid = ou.ospawn *%w{ echo FOO }, out: w
         w.close; Process.wait pid; x = r.read; r.close
         x.should == "FOO\n"
@@ -110,8 +109,7 @@ describe 'obfusk/util/run' do
   context 'ospawn_w' do                                          # {{{1
     it 'colour' do
       r, w = IO.pipe
-      ou.capture_stdout do
-        def $stdout.isatty; true; end
+      ou.capture_stdout(:tty) do
         res = ou.ospawn_w *%w{ echo FOO }, out: w
         w.close; x = r.read; r.close
         x.should == "FOO\n"

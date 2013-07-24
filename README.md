@@ -170,12 +170,12 @@ bar.check!        # => IncompleteError b/c there are empty fields
 
 ```ruby
 Obfusk::Util::Term.colour :red
-# => ansi escape code if STDOUT is a tty, '' otherwise
+# => ansi escape code if $stdout is a tty, '' otherwise
 
 Obfusk::Util::Term.columns                # terminal columns
 Obfusk::Util::Term.lines                  # terminal lines
-Obfusk::Util::Term.tty?                   # is STDOUT a tty?
-Obfusk::Util::Term.tty? :err              # is STDERR a tty?
+Obfusk::Util::Term.tty?                   # is $stdout a tty?
+Obfusk::Util::Term.tty? :err              # is $stderr a tty?
 
 Obfusk::Util::Term.prompt 'foo> '         # prompt for input
 Obfusk::Util::Term.prompt 'foo> ', :hide  # prompt for password

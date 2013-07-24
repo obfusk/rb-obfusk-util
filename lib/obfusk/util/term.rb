@@ -52,7 +52,9 @@ module Obfusk; module Util; module Term
 
   # colour code (or '' if not tty)
   def self.colour(x, what = :out)
-    tty?(what) ? TERM_COLOUR_ESCAPES.fetch(x) : ''
+    c = TERM_COLOUR_ESCAPES[x] or raise ArgumentError,
+          "No such colour: #{x}"
+    tty?(what) ? c : ''
   end
 
   # colour code for $stderr

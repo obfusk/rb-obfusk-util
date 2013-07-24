@@ -22,9 +22,8 @@ describe 'obfusk/util/message' do
         "==> hi there!\n"
     end
     it 'colours' do
-      ou.capture_stdout do
-        def $stdout.isatty; true; end; ou.ohai 'hi there!'
-      end .should == "\e[1;34m==> \e[1;37mhi there!\e[0m\n"
+      ou.capture_stdout(:tty) { ou.ohai 'hi there!' } \
+        .should == "\e[1;34m==> \e[1;37mhi there!\e[0m\n"
     end
   end                                                           # }}}1
 
@@ -34,10 +33,9 @@ describe 'obfusk/util/message' do
         "==> Do: foo, bar\n"
     end
     it 'colours' do
-      ou.capture_stdout do
-        def $stdout.isatty; true; end; ou.onow 'Do', *%w{ foo bar }
-      end .should == "\e[1;32m==> \e[1;37mDo\e[0m: " +
-                     "\e[1;32mfoo\e[0m, \e[1;32mbar\e[0m\n"
+      ou.capture_stdout(:tty) { ou.onow 'Do', *%w{ foo bar } } \
+        .should == "\e[1;32m==> \e[1;37mDo\e[0m: " +
+                   "\e[1;32mfoo\e[0m, \e[1;32mbar\e[0m\n"
     end
   end                                                           # }}}1
 
@@ -47,9 +45,8 @@ describe 'obfusk/util/message' do
         "Error: oops!\n"
     end
     it 'colours' do
-      ou.capture_stderr do
-        def $stderr.isatty; true; end; ou.onoe 'oops!'
-      end .should == "\e[1;31mError\e[0m: oops!\n"
+      ou.capture_stderr(:tty) { ou.onoe 'oops!' } \
+        .should == "\e[1;31mError\e[0m: oops!\n"
     end
     it 'logger' do
       log = []; l = ->(msg) { log << msg }
