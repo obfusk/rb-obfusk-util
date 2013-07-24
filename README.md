@@ -147,7 +147,7 @@ end
 []: {{{2
 
 ```ruby
-Foo = Obfusk::Util.struct(*%w{ field1 field2, field3 }) do
+Foo = Obfusk::Util.struct(*%w{ field1 field2 field3 }) do
   def some_method; field1 + field2; end
 end
 
