@@ -42,7 +42,7 @@ module Obfusk; module Util
   # set `opts[:log]` to a lambda to pass message on to a logger
   def self.onoe(msg, opts = {})
     l = opts[:label] || 'Error'
-    STDERR.puts _tcole(:lrd) + l + _tcole(:non) + ': ' + msg
+    $stderr.puts _tcole(:lrd) + l + _tcole(:non) + ': ' + msg
     opts[:log]["#{l}: #{msg}"] if opts[:log]
   end
 

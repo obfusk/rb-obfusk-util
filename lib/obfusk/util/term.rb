@@ -55,7 +55,7 @@ module Obfusk; module Util; module Term
     tty?(what) ? TERM_COLOUR_ESCAPES.fetch(x) : ''
   end
 
-  # colour code for STDERR
+  # colour code for $stderr
   def self.colour_e(x)
     colour x, :err
   end
@@ -72,18 +72,18 @@ module Obfusk; module Util; module Term
     %x[#{GET_LINES}].to_i
   end
 
-  # is STDOUT (or STDERR) a tty?
+  # is $stdout (or $stderr) a tty?
   def self.tty?(what = :out)
-    (what == :out ? STDOUT : STDERR).isatty
+    (what == :out ? $stdout : $stderr).isatty
   end
 
   # --
 
   # prompt for line; optionally hide input
   def self.prompt(prompt, hide = false)
-    print prompt; STDOUT.flush
-    line = hide ? STDIN.noecho { |i| i.gets } .tap { puts } :
-                  STDIN.gets
+    print prompt; $stdout.flush
+    line = hide ? $stdin.noecho { |i| i.gets } .tap { puts } :
+                  $stdin.gets
     line && line.chomp
   end
 

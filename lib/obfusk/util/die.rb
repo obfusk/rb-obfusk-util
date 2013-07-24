@@ -20,7 +20,7 @@ module Obfusk; module Util
 
   # print msgs to stderr, show usage, exit
   def self.udie!(usage, *msgs)
-    code = _die_msgs msgs; STDERR.puts "Usage: #{usage}"; exit code
+    code = _die_msgs msgs; $stderr.puts "Usage: #{usage}"; exit code
   end
 
   # --
@@ -36,7 +36,7 @@ module Obfusk; module Util
   # helper; modifies msgs -> OK b/c comes from *msgs
   def self._die_msgs(msgs)
     code = (msgs.last.is_a?(Hash) && msgs.pop[:exit]) || 1
-    msgs.each { |m| STDERR.puts "Error: #{m}" }
+    msgs.each { |m| $stderr.puts "Error: #{m}" }
     code
   end
 
