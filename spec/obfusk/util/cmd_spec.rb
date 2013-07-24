@@ -13,7 +13,7 @@ require 'obfusk/util/cmd'
 
 ouc = Obfusk::Util::Cmd
 
-describe ouc do
+describe 'obfusk/util/cmd' do
 
   context 'killsig' do                                          # {{{1
     it 'SIGINT' do

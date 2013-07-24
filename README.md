@@ -43,6 +43,11 @@ Obfusk::Util::Cmd.set_vars 'echo ${FOO} ... ${BAR} ...',
 []: {{{2
 
 ```ruby
+x = { x: { y: 0 }, z: [1,2,3] }
+Obfusk::Util.assoc(x, [:x,:y] => 1, [:z,1] => 99)
+x[:x][:y] == 1          # => true
+x[:z]     == [1,99,3]   # => true
+
 y = Obfusk::Util.deepdup x
 Obfusk::Util.empty_as_nil(ENV['FOO']) || default
 ```

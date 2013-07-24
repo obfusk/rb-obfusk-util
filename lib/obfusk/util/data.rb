@@ -16,7 +16,7 @@ module Obfusk; module Util
   # will autovivivy missing (if false/nil) nested objects as hashes
   #
   # ```
-  # x = {x:{y:0}} => assoc(x, [:x,:y] => 1) <=> x[:x,:y] = 1
+  # x = { x: { y: 0 } }; assoc(x, [:x,:y] => 1); x[:x][:y] == 1
   # ```
   def self.assoc(x, h = {})                                   # {{{1
     h.each do |k,v|

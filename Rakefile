@@ -8,6 +8,11 @@ task 'spec:verbose' do
   sh 'rspec -cfd'
 end
 
+desc 'Run specs verbosely, view w/ less'
+task 'spec:less' do
+  sh 'rspec -cfd --tty | less -R'
+end
+
 desc 'Generate docs'
 task :docs do
   sh 'yardoc | cat'
