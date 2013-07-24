@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/die.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-17
+# Date        : 2013-07-24
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -12,7 +12,7 @@
 module Obfusk; module Util
 
   # print msgs to stderr and exit 1;
-  # pass { exit: code } as last argument to use other exit code
+  # pass `{ exit: code }` as last argument to use other exit code
   def self.die!(*msgs)
     code = _die_msgs msgs; exit code
   end
@@ -24,7 +24,7 @@ module Obfusk; module Util
 
   # --
 
-  # onoe, exit; requires obfusk/util/message
+  # onoe, exit; requires `obfusk/util/message`
   def self.odie!(msg, opts = {})
     o = opts.dup; c = o.delete(:code) || 1
     ::Obfusk::Util.onoe msg, o; exit c

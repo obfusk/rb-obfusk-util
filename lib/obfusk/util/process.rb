@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/process.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-17
+# Date        : 2013-07-24
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -20,7 +20,10 @@ module Obfusk; module Util; module Process
     ispid! pid; %x[#{GET_AGE[pid]}].gsub(/\s/, '')
   end
 
-  # process alive? returns false/true/:not_mine
+  # process alive?
+  # @return [Boolean] false if not alive
+  # @return [Boolean] true if alive and mine
+  # @return [Symbol]  :not_mine if alive and not mine
   def self.alive?(pid)
     ::Process.kill 0, pid; true
   rescue Errno::EPERM; :not_mine

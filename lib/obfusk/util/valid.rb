@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/valid.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-22
+# Date        : 2013-07-24
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -16,7 +16,8 @@ module Obfusk; module Util; module Valid
 
   # --
 
-  # validate #args in min..max (min.. if max=nil); returns args
+  # validate #args in min..max (min.. if max is nil)
+  # @return [Array] args
   # @raise ArgumentError on out of bounds
   def self.args(what, args, min, max = min)
     if (l = args.length) < min || (max && l > max)

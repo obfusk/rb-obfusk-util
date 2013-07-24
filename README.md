@@ -71,24 +71,29 @@ Obfusk::Util.onoe 'Something is wrong!' # error in colour
 Obfusk::Util.opoo 'This looks funny!'   # warning in colour
 ```
 
+There are some o\* methods all over obfusk-util that combine some
+operation with e.g. ohai.
+
 []: }}}2
 
 []: {{{2
 
 ```ruby
-Obfusk::Util.require_all 'foo/bar' # requires foo/bar/*
+Obfusk::Util.require_all 'foo/bar'
+# requires foo/bar/*
 
 Obfusk::Util.submodules Foo
-=> { 'bar' => Foo::Bar, 'baz' => Foo:Baz, ... }
+# => { 'bar' => Foo::Bar, 'baz' => Foo:Baz, ... }
 ```
 
 []: }}}2
 
 []: {{{2
 
+Slightly improved OptionParser (w/o officious options):
+
 ```ruby
-# slightly improved OptionParser (w/o officious options)
-p = Obfusk::Util::Opt::Parser.new ...
+p = Obfusk::Util::Opt::Parser.new # ...
 remaining_args = p.parse_r ARGV
 ```
 
@@ -116,13 +121,13 @@ Obfusk::Util::Process.alive? pid  # => false/true/:not_mine
 
 []: {{{2
 
+spawn_w is spawn + wait (which is nicer than system).  No shell is
+ever used; env is an option instead of an optional first argument;
+ENOENT becomes RunError.  See also: exec, spawn, system, popen3.
+
 ```ruby
-# spawn_w is spawn + wait (which is nicer than system).
-# No shell is ever used; env is an option instead of an optional
-# first argument; ENOENT becomes RunError.
-# Also: exec, spawn, system, popen3
 Obfusk::Util.spawn_w *%w{ some command }, env: { 'FOO' => 'bar' },
-  chdir: 'some/dir', ...
+  chdir: 'some/dir' #, ...
 # => $?
 
 # raise RunError if command returned non-zero
@@ -147,7 +152,7 @@ foo.some_method # => 42
 # build a Foo which is frozen when the block ends
 bar = Foo.build(field1: 99) do |x|
   c.field2 = 1
-  ...
+  # ...
 end
 
 bar.field3 = 99   # => RuntimeError b/c frozen

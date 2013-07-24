@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/data.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-17
+# Date        : 2013-07-24
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -12,8 +12,11 @@
 module Obfusk; module Util
 
   # assoc key(s) w/ value(s); array keys represent nested keys;
-  # e.g. x = {x:{y:0}} => assoc(x, [:x,:y] => 1) <=> x[:x,:y] = 1;
   # will autovivivy missing (if false/nil) nested objects as hashes
+  #
+  # ```
+  # x = {x:{y:0}} => assoc(x, [:x,:y] => 1) <=> x[:x,:y] = 1
+  # ```
   def self.assoc(x, h = {})                                   # {{{1
     h.each do |k,v|
       if k.is_a? Array
@@ -34,7 +37,7 @@ module Obfusk; module Util
     Marshal.load Marshal.dump obj
   end
 
-  # nil if x is .empty?, x otherwise
+  # nil if x is `.empty?`, x otherwise
   def self.empty_as_nil(x)
     x && x.empty? ? nil : x
   end

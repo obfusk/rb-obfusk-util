@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/message.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-21
+# Date        : 2013-07-24
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -13,12 +13,18 @@ require 'obfusk/util/term'
 
 module Obfusk; module Util
 
-  # info message; "==> <msg>" w/ colours
+  # info message w/ colours:
+  # ```
+  # "==> <msg>"
+  # ```
   def self.ohai(msg)
     puts _tcol(:lbl) + '==> ' + _tcol(:whi) + msg + _tcol(:non)
   end
 
-  # info message; "==> <msg>: <a>[, <b>, ...]" w/ colours
+  # info message w/ colours:
+  # ```
+  # "==> <msg>: <a>[, <b>, ...]"
+  # ```
   def self.onow(msg, *what)
     puts _tcol(:lgn) + '==> ' + _tcol(:whi) + msg + _tcol(:non) +
       (what.empty? ? '' : _owhat(what))
@@ -26,9 +32,13 @@ module Obfusk; module Util
 
   # --
 
-  # error message; "<label>: <msg>" w/ colours;
-  # opts[:label] defaults to 'Error';
-  # set opts[:log] to a lambda to pass message on to a logger
+  # error message w/ colours:
+  # ```
+  # "<label>: <msg>"
+  # ```
+  #
+  # `opts[:label]` defaults to 'Error';
+  # set `opts[:log]` to a lambda to pass message on to a logger
   def self.onoe(msg, opts = {})
     l = opts[:label] || 'Error'
     STDERR.puts _tcole(:lrd) + l + _tcole(:non) + ': ' + msg

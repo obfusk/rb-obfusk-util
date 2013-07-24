@@ -17,10 +17,10 @@ module Obfusk; module Util; module Cmd
 
   # --
 
-  # parses optional SIG* prefix in command string
-  # (e.g. 'SIGINT foo bar ...');
-  # returns { command: command, signal: signal };
+  # parses optional `SIG*` prefix in command string;
+  # (e.g. `'SIGINT foo bar ...'`);
   # if there is no prefix, signal is default
+  # @return [Hash] `{ command: command, signal: signal }`
   def self.killsig(cmd, default = 'SIGTERM')                    # {{{1
     if m = cmd.match(SIG_RX)
       { command: m[2], signal: m[1] }
@@ -29,11 +29,11 @@ module Obfusk; module Util; module Cmd
     end
   end                                                           # }}}1
 
-  # parses optional SHELL[=...] prefix in command string
-  # (e.g. 'SHELL=bash foo bar ...', 'SHELL foo bar ...');
-  # returns { command: command, shell: shell };
+  # parses optional `SHELL[=...]` prefix in command string
+  # (e.g. `'SHELL=bash foo bar ...'`, `'SHELL foo bar ...'`);
   # if there is no prefix, shell is nil;
-  # if there is no =..., shell is default
+  # if there is no `=...`, shell is default
+  # @return [Hash] `{ command: command, shell: shell }`
   def self.shell(cmd, default = 'bash')                         # {{{1
     if m = cmd.match(SH_RX)
       { command: m[3], shell: (m[2] || default) }
@@ -49,14 +49,15 @@ module Obfusk; module Util; module Cmd
     ['nohup'] + args
   end
 
-  # replaces ${VAR}s in command string using vars hash
+  # replaces `${VAR}s` in command string using vars hash
   def self.set_vars(cmd, vars)
     cmd.gsub(VAR_RX) { |m| vars[$1] }
   end
 
   # --
 
-  # env hash as array of ['k1="v1"', ...] w/o nil values
+  # env hash as array (w/o nil values)
+  # @return [<String>] `['k1="v1"', ...]`
   def self.env_to_a(h)
     h.reject { |k,v| v.nil? } .map { |k,v| "#{k}=#{v.inspect}" }
   end

@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/fs.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-17
+# Date        : 2013-07-24
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -23,7 +23,7 @@ module Obfusk; module Util; module FS
     File.exists?(path) || File.symlink?(path)
   end
 
-  # ohai + mkdir_p; requires obfusk/util/message
+  # ohai + mkdir_p; requires `obfusk/util/message`
   def self.omkdir_p(*paths)
     ::Obfusk::Util.ohai "mkdir -p #{paths*' '}"
     FileUtils.mkdir_p paths

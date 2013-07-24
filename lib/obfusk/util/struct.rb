@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/struct.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-17
+# Date        : 2013-07-24
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -11,12 +11,14 @@
 
 module Obfusk; module Util
 
+  # better Struct; create using Obfusk::Util.struct
   module BetterStruct                                           # {{{1
 
     class IncompleteError < RuntimeError; end
 
     # --
 
+    # include class methods as well
     def self.included(base)
       base.extend ClassMethods
     end
@@ -59,7 +61,7 @@ module Obfusk; module Util
 
   # --
 
-  # better struct
+  # better struct; see examples in README.md
   def self.struct(*fields, &b)                                  # {{{1
     Class.new(Struct.new(*fields.map(&:to_sym))) do
 

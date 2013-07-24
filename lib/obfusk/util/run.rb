@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/run.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-23
+# Date        : 2013-07-24
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -62,19 +62,19 @@ module Obfusk; module Util
 
   # --
 
-  # ohai + spawn; requires obfusk/util/message
+  # ohai + spawn; requires `obfusk/util/message`
   def self.ospawn(*args)
     ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; spawn *args
   end
 
-  # ohai + spawn_w; requires obfusk/util/message
+  # ohai + spawn_w; requires `obfusk/util/message`
   def self.ospawn_w(*args)
     ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; spawn_w *args
   end
 
   # --
 
-  # run block w/ args, check .exitstatus
+  # run block w/ args, check `.exitstatus`
   # @raise RunError if Process::Status's exitstatus is non-zero
   def self.chk_exit(args, &b)
     chk_exitstatus args, b[args].exitstatus
