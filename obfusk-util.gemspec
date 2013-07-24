@@ -6,6 +6,8 @@ Gem::Specification.new do |s|
   s.summary     = 'miscellaneous utility library for ruby'
 
   s.description = <<-END.gsub(/^ {4}/, '')
+    miscellaneous utility library for ruby
+
     ...
   END
 
