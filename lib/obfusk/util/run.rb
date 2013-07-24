@@ -11,6 +11,7 @@
 
 require 'open3'
 
+# my namespace
 module Obfusk; module Util
 
   class RunError < RuntimeError; end

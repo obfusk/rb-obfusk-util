@@ -9,6 +9,7 @@
 #
 # --                                                            ; }}}1
 
+# my namespace
 module Obfusk; module Util; module Cmd
 
   SIG_RX  = /^(SIG[A-Z0-9]+)\s+(.*)$/

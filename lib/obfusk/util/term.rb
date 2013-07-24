@@ -11,6 +11,7 @@
 
 require 'io/console'
 
+# my namespace
 module Obfusk; module Util; module Term
 
   # ansi colour codes

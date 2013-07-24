@@ -9,6 +9,7 @@
 #
 # --                                                            ; }}}1
 
+# my namespace
 module Obfusk; module Util; module Process
 
   GET_AGE = ->(pid) { "ps -p #{pid} -o etime=" }

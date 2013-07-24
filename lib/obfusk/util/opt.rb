@@ -11,6 +11,7 @@
 
 require 'optparse'
 
+# my namespace
 module Obfusk; module Util; module Opt
 
   # better OptionParser

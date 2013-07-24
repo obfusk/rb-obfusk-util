@@ -9,6 +9,7 @@
 #
 # --                                                            ; }}}1
 
+# my namespace
 module Obfusk; module Util
 
   # load `dir/*` (by searching for `dir/*.rb` in `$LOAD_PATH`)

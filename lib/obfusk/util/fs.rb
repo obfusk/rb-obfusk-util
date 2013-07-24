@@ -11,6 +11,7 @@
 
 require 'fileutils'
 
+# my namespace
 module Obfusk; module Util; module FS
 
   # append to file

@@ -11,6 +11,7 @@
 
 require 'obfusk/util/term'
 
+# my namespace
 module Obfusk; module Util
 
   # info message w/ colours:
