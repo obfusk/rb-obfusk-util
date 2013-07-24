@@ -13,7 +13,7 @@
 module Obfusk; module Util
 
   # print msgs to stderr and exit 1;
-  # pass `{ exit: code }` as last argument to use other exit code
+  # pass `{ status: code }` as last argument to use other statuscode
   def self.die!(*msgs)
     code = _die_msgs msgs; exit code
   end
@@ -27,7 +27,7 @@ module Obfusk; module Util
 
   # onoe, exit; requires `obfusk/util/message`
   def self.odie!(msg, opts = {})
-    o = opts.dup; c = o.delete(:code) || 1
+    o = opts.dup; c = o.delete(:status) || 1
     ::Obfusk::Util.onoe msg, o; exit c
   end
 
@@ -35,7 +35,7 @@ module Obfusk; module Util
 
   # helper; modifies msgs -> OK b/c comes from *msgs
   def self._die_msgs(msgs)
-    code = (msgs.last.is_a?(Hash) && msgs.pop[:exit]) || 1
+    code = (msgs.last.is_a?(Hash) && msgs.pop[:status]) || 1
     msgs.each { |m| $stderr.puts "Error: #{m}" }
     code
   end
