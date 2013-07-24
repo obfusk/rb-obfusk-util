@@ -19,8 +19,9 @@ Gem::Specification.new do |s|
 
   s.license     = 'GPLv2'
 
-  s.files       = %w{ README.md obfusk-util.gemspec }\
-                + Dir['lib/**/*.rb']
+  s.files       = %w{ .yardopts README.md Rakefile } \
+                + %w{ obfusk-util.gemspec } \
+                + Dir['{lib,spec}/**/*.rb']
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
