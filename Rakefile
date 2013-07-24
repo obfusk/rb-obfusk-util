@@ -13,6 +13,11 @@ task 'spec:less' do
   sh 'rspec -cfd --tty | less -R'
 end
 
+desc 'Check for warnings'
+task :warn do
+  sh 'ruby -w -I lib -r obfusk/util/all -e ""'
+end
+
 desc 'Generate docs'
 task :docs do
   sh 'yardoc | cat'

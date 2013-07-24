@@ -24,7 +24,7 @@ module Obfusk; module Util
         case k.length
         when 0; raise ArgumentError, 'empty array key'
         when 1; x[k.first] = v
-        else    h, *t = k; assoc (x[h] ||= {}), t => v
+        else    h, *t = k; assoc(x[h] ||= {}, t => v)
         end
       else
         x[k] = v

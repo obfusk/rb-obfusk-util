@@ -35,7 +35,7 @@ module Obfusk; module Util; module Valid
   # validate value against regex
   # @raise ValidationError on no match
   def self.validate!(x, rx, name)
-    x.to_s.match /^(#{rx})$/ or invalid! "invalid #{name}"
+    x.to_s.match(/^(#{rx})$/) or invalid! "invalid #{name}"
   end
 
 end; end; end

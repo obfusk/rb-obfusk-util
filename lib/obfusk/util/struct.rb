@@ -73,7 +73,7 @@ module Obfusk; module Util
         h.each { |k,v| self[k] = v }
       end
 
-      self.class_eval &b if b
+      self.class_eval(&b) if b
 
     end
   end                                                           # }}}1

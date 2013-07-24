@@ -23,7 +23,7 @@ module Obfusk; module Util
   # @raise RunError on ENOENT
   def self.exec(*args)
     _enoent_to_run('exec', args) do |a|
-      Kernel.exec *_spawn_args(*a)
+      Kernel.exec(*_spawn_args(*a))
     end
   end
 
@@ -34,7 +34,7 @@ module Obfusk; module Util
   # @raise RunError on ENOENT
   def self.spawn(*args)
     _enoent_to_run('spawn', args) do |a|
-      Kernel.spawn *_spawn_args(*a)
+      Kernel.spawn(*_spawn_args(*a))
     end
   end
 
@@ -46,7 +46,7 @@ module Obfusk; module Util
   # better Kernel.system; returns true/false; see exec, spawn, spawn_w
   # @raise RunError on failure (Kernel.system -> nil)
   def self.system(*args)
-    r = Kernel.system *_spawn_args(*args)
+    r = Kernel.system(*_spawn_args(*args))
     raise RunError, "failed to run command #{args} (#$?)" if r.nil?
     r
   end
@@ -57,7 +57,7 @@ module Obfusk; module Util
   # @raise RunError on ENOENT
   def self.popen3(*args, &b)
     _enoent_to_run('popen3', args) do |a|
-      Open3.popen3 *_spawn_args(*a), &b
+      Open3.popen3(*_spawn_args(*a), &b)
     end
   end
 
@@ -65,12 +65,12 @@ module Obfusk; module Util
 
   # ohai + spawn; requires `obfusk/util/message`
   def self.ospawn(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; spawn *args
+    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; spawn(*args)
   end
 
   # ohai + spawn_w; requires `obfusk/util/message`
   def self.ospawn_w(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; spawn_w *args
+    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; spawn_w(*args)
   end
 
   # --
