@@ -18,6 +18,12 @@ task :warn do
   sh 'ruby -w -I lib -r obfusk/util/all -e ""'
 end
 
+desc 'Check for warnings in specs'
+task 'warn:spec' do
+  reqs = Dir['spec/**/*.rb'].sort.map { |x| "-r ./#{x}" } * ' '
+  sh "ruby -w -I lib -r rspec #{reqs} -e ''"
+end
+
 desc 'Generate docs'
 task :docs do
   sh 'yardoc | cat'
