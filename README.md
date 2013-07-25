@@ -2,10 +2,10 @@
 
     File        : README.md
     Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-    Date        : 2013-07-24
+    Date        : 2013-07-25
 
     Copyright   : Copyright (C) 2013  Felix C. Stegerman
-    Version     : v0.0.1.SNAPSHOT
+    Version     : v0.2.0.SNAPSHOT
 
 []: }}}1
 
@@ -57,7 +57,7 @@ Obfusk::Util.empty_as_nil(ENV['FOO']) || default
 []: {{{2
 
 ```ruby
-Obfusk::Util::FS.append 'file', *lines
+Obfusk::Util::FS.append('file', *lines)
 Obfusk::Util::FS.exists? 'file-or-possibly-broken-symlink'
 ```
 
@@ -66,7 +66,7 @@ Obfusk::Util::FS.exists? 'file-or-possibly-broken-symlink'
 []: {{{2
 
 ```ruby
-Obfusk::Util.ohai *%w{ rackup -p 8888 }
+Obfusk::Util.ohai(*%w{ rackup -p 8888 })
 # shows '==> rackup -p 8888' in colour
 
 Obfusk::Util.onow 'Starting', 'foo', 'bar'
@@ -131,14 +131,14 @@ ever used; env is an option instead of an optional first argument;
 ENOENT becomes RunError.  See also: exec, spawn, system, popen3.
 
 ```ruby
-Obfusk::Util.spawn_w *%w{ some command }, env: { 'FOO' => 'bar' },
-  chdir: 'some/dir' #, ...
+Obfusk::Util.spawn_w(*%w{ some command }, env: { 'FOO' => 'bar' },
+  chdir: 'some/dir') #, ...
 # => $?
 
 # raise RunError if command returned non-zero
 Obfusk::Util.chk_exit(%w{ some command }) do |a|
   # spawn + wait + ohai
-  Obfusk::Util.ospawn_w *a
+  Obfusk::Util.ospawn_w(*a)
 end
 ```
 

@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/run_spec.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-24
+# Date        : 2013-07-25
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -98,7 +98,7 @@ describe 'obfusk/util/run' do
     it 'colour' do
       r, w = IO.pipe
       ou.capture_stdout(:tty) do
-        pid = ou.ospawn *%w{ echo FOO }, out: w
+        pid = ou.ospawn(*%w{ echo FOO }, out: w)
         w.close; Process.wait pid; x = r.read; r.close
         x.should == "FOO\n"
         $?.exitstatus.should == 0
@@ -110,7 +110,7 @@ describe 'obfusk/util/run' do
     it 'colour' do
       r, w = IO.pipe
       ou.capture_stdout(:tty) do
-        res = ou.ospawn_w *%w{ echo FOO }, out: w
+        res = ou.ospawn_w(*%w{ echo FOO }, out: w)
         w.close; x = r.read; r.close
         x.should == "FOO\n"
         res.exitstatus.should == 0
@@ -120,11 +120,11 @@ describe 'obfusk/util/run' do
 
   context 'chk_exit' do                                          # {{{1
     it 'zero' do
-      expect { ou.chk_exit(%w{ true }) { |a| ou.spawn_w *a } } \
+      expect { ou.chk_exit(%w{ true }) { |a| ou.spawn_w(*a) } } \
         .to_not raise_error
     end
     it 'non-zero' do
-      expect { ou.chk_exit(%w{ false }) { |a| ou.spawn_w *a } } \
+      expect { ou.chk_exit(%w{ false }) { |a| ou.spawn_w(*a) } } \
         .to raise_error(ou::RunError, /command returned non-zero/)
     end
   end                                                           # }}}1

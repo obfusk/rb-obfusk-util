@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/process_spec.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-24
+# Date        : 2013-07-25
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -19,7 +19,7 @@ describe 'obfusk/util/process' do
     it 'age' do
       pid = spawn 'sleep 100'
       begin
-        pr.age(pid).should match /^00:0\d$/                     # ????
+        pr.age(pid).should match(/^00:0\d$/)                    # ????
       ensure
         Process.kill 'TERM', pid; Process.wait pid
       end

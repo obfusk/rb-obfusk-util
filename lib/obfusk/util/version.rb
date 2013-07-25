@@ -1,5 +1,5 @@
 # my namespace
 module Obfusk; module Util
-  VERSION = '0.0.1.SNAPSHOT'
+  VERSION = '0.2.0.SNAPSHOT'
   DATE    = '2013-07-24'
 end; end

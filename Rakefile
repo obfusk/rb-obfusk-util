@@ -24,6 +24,11 @@ task 'warn:spec' do
   sh "ruby -w -I lib -r rspec #{reqs} -e ''"
 end
 
+desc 'Check for warnings in specs (but not void context)'
+task 'warn:spec:novoid' do
+  sh 'rake warn:spec 2>&1 | grep -v "void context"'
+end
+
 desc 'Generate docs'
 task :docs do
   sh 'yardoc | cat'

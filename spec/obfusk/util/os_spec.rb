@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/os_spec.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-24
+# Date        : 2013-07-25
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -32,7 +32,7 @@ describe 'obfusk/util/os' do
 
   context 'now' do                                              # {{{1
     it 'now' do
-      os.now.should match /^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d$/
+      os.now.should match(/^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d$/)
     end
   end                                                           # }}}1
 
