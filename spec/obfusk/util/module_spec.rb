@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/module_spec.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-24
+# Date        : 2013-07-25
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -22,6 +22,22 @@ ou = Obfusk::Util
 ms = ou::Module__Spec
 
 describe 'obfusk/util/module' do
+
+  context 'link_mod_method' do                                  # {{{1
+    it 'link_mod_method' do
+      x = Module.new; y = Module.new
+      x.module_eval do
+        def self.foo; 42; end
+        def self.bar; 37; end
+      end
+      y.module_eval do
+        ou.link_mod_method x, :foo, self
+        ou.link_mod_method x, :bar, self, :baz
+      end
+      y.foo.should == 42
+      y.baz.should == 37
+    end
+  end                                                           # }}}1
 
   context 'require_all' do                                      # {{{1
     it 'require_all' do

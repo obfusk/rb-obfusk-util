@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/module.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-24
+# Date        : 2013-07-25
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
@@ -11,6 +11,14 @@
 
 # my namespace
 module Obfusk; module Util
+
+  # create module method to.to_meth that calls from.from_meth
+  def self.link_mod_method(from, from_meth, to, to_meth = from_meth)
+    to.module_exec(from, from_meth, to_meth) do |f,fm,tm|
+      (class << self; self; end).send(:define_method, tm) \
+        { |*a,&b| f.send(fm, *a, &b) }
+    end
+  end
 
   # load `dir/*` (by searching for `dir/*.rb` in `$LOAD_PATH`)
   #

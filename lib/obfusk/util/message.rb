@@ -2,13 +2,14 @@
 #
 # File        : obfusk/util/message.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2013-07-24
+# Date        : 2013-07-25
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
 # Licence     : GPLv2
 #
 # --                                                            ; }}}1
 
+require 'obfusk/util/module'
 require 'obfusk/util/term'
 
 # my namespace
@@ -58,15 +59,8 @@ module Obfusk; module Util
     ': ' + what.map { |x| _tcol(:lgn) + x + _tcol(:non) } *', '
   end
 
-  # Term.colour
-  def self._tcol(*a)
-    Term.colour(*a)
-  end
-
-  # Term.colour_e
-  def self._tcole(*a)
-    Term.colour_e(*a)
-  end
+  link_mod_method Term, :colour  , self, :_tcol
+  link_mod_method Term, :colour_e, self, :_tcole
 
 end; end
 
