@@ -2,7 +2,7 @@
 
     File        : README.md
     Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-    Date        : 2013-07-25
+    Date        : 2013-07-28
 
     Copyright   : Copyright (C) 2013  Felix C. Stegerman
     Version     : v0.2.0.SNAPSHOT
@@ -84,6 +84,13 @@ operation with e.g. ohai.
 []: {{{2
 
 ```ruby
+module Foo; def self.foo; 42; end; end
+module Bar
+  # alias Foo.foo as Bar.foo and Bar.bar
+  Obfusk::Util.link_mod_method Foo, :foo, self
+  Obfusk::Util.link_mod_method Foo, :foo, self, :bar
+end
+
 Obfusk::Util.require_all 'foo/bar'
 # requires foo/bar/*
 
@@ -139,6 +146,24 @@ Obfusk::Util.spawn_w(*%w{ some command }, env: { 'FOO' => 'bar' },
 Obfusk::Util.chk_exit(%w{ some command }) do |a|
   # spawn + wait + ohai
   Obfusk::Util.ospawn_w(*a)
+end
+```
+
+[]: }}}2
+
+[]: {{{2
+
+```ruby
+Obfusk::Util.provide_stdin(input) do
+  # do something with $stdin
+end
+
+output = Obfusk::Util.capture_stdout do
+  # do something with $stdout
+end
+
+output = Obfusk::Util.capture_stderr(:tty) do
+  # do something with $stderr; $stderr.isatty => true
 end
 ```
 
