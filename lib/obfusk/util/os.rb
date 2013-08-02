@@ -5,7 +5,7 @@
 # Date        : 2013-07-24
 #
 # Copyright   : Copyright (C) 2013  Felix C. Stegerman
-# Licence     : GPLv2
+# Licence     : GPLv2 or EPLv1
 #
 # --                                                            ; }}}1
 
