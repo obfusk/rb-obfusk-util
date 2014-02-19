@@ -24,6 +24,7 @@ module Obfusk; module Util
       base.extend ClassMethods
     end
 
+    # class methods
     module ClassMethods                                         # {{{2
 
       # new, block, freeze, return
