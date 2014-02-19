@@ -9,6 +9,8 @@
 
 []: }}}1
 
+[![Gem Version](https://badge.fury.io/rb/obfusk-util.png)](http://badge.fury.io/rb/obfusk-util)
+
 ## Description
 
   [rb-]obfusk-util - miscellaneous utility library for ruby
