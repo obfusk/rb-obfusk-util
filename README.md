@@ -2,28 +2,31 @@
 
     File        : README.md
     Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-    Date        : 2013-08-01
+    Date        : 2014-02-19
 
-    Copyright   : Copyright (C) 2013  Felix C. Stegerman
-    Version     : v0.2.0.SNAPSHOT
+    Copyright   : Copyright (C) 2014  Felix C. Stegerman
+    Version     : v0.4.0
 
 []: }}}1
 
 ## Description
-[]: {{{1
 
   [rb-]obfusk-util - miscellaneous utility library for ruby
-
-  ...
-
-[]: }}}1
 
 ## Examples
 []: {{{1
 
+```ruby
+require 'obfusk/util/all'
+```
+
+---
+
 []: {{{2
 
 ```ruby
+require 'obfusk/util/cmd'
+
 Obfusk::Util::Cmd.killsig 'SIGINT foo bar'
 # => { command: 'foo bar', signal: 'SIGINT' }
 
@@ -40,9 +43,13 @@ Obfusk::Util::Cmd.set_vars 'echo ${FOO} ... ${BAR} ...',
 
 []: }}}2
 
+---
+
 []: {{{2
 
 ```ruby
+require 'obfusk/util/data'
+
 x = { x: { y: 0 }, z: [1,2,3] }
 Obfusk::Util.assoc(x, [:x,:y] => 1, [:z,1] => 99)
 x[:x][:y] == 1          # => true
@@ -54,18 +61,26 @@ Obfusk::Util.empty_as_nil(ENV['FOO']) || default
 
 []: }}}2
 
+---
+
 []: {{{2
 
 ```ruby
+require 'obfusk/util/fs'
+
 Obfusk::Util::FS.append('file', *lines)
 Obfusk::Util::FS.exists? 'file-or-possibly-broken-symlink'
 ```
 
 []: }}}2
 
+---
+
 []: {{{2
 
 ```ruby
+require 'obfusk/util/message'
+
 Obfusk::Util.ohai(*%w{ rackup -p 8888 })
 # shows '==> rackup -p 8888' in colour
 
@@ -76,14 +91,18 @@ Obfusk::Util.onoe 'Something is wrong!' # error in colour
 Obfusk::Util.opoo 'This looks funny!'   # warning in colour
 ```
 
-There are some o\* methods all over obfusk-util that combine some
-operation with e.g. ohai.
+There are some `o*` methods all over `obfusk-util` that combine some
+operation with e.g. `ohai`.
 
 []: }}}2
+
+---
 
 []: {{{2
 
 ```ruby
+require 'obfusk/util/module'
+
 module Foo; def self.foo; 42; end; end
 module Bar
   # alias Foo.foo as Bar.foo and Bar.bar
@@ -100,20 +119,28 @@ Obfusk::Util.submodules Foo
 
 []: }}}2
 
+---
+
 []: {{{2
 
-Slightly improved OptionParser (w/o officious options):
+Slightly improved `OptionParser` (w/o officious options):
 
 ```ruby
+require 'obfusk/util/opt'
+
 p = Obfusk::Util::Opt::Parser.new # ...
 remaining_args = p.parse_r ARGV
 ```
 
 []: }}}2
 
+---
+
 []: {{{2
 
 ```ruby
+require 'obfusk/util/os'
+
 Obfusk::Util::OS.home         # => current user's home
 Obfusk::Util::OS.home 'user'  # => user's home
 Obfusk::Util::OS.user         # => current user
@@ -122,22 +149,31 @@ Obfusk::Util::OS.now          # => current time as '%F %T'
 
 []: }}}2
 
+---
+
 []: {{{2
 
 ```ruby
+require 'obfusk/util/process'
+
 Obfusk::Util::Process.age pid     # => e.g. '01:06:19'
 Obfusk::Util::Process.alive? pid  # => false/true/:not_mine
 ```
 
 []: }}}2
 
+---
+
 []: {{{2
 
-spawn_w is spawn + wait (which is nicer than system).  No shell is
-ever used; env is an option instead of an optional first argument;
-ENOENT becomes RunError.  See also: exec, spawn, system, popen3.
+`spawn_w` is `spawn` + `wait` (which is nicer than `system`).  No
+shell is ever used; `env` is an option instead of an optional first
+argument; `ENOENT` becomes `RunError`.  See also: `exec`, `spawn`,
+`system`, `popen3`.
 
 ```ruby
+require 'obfusk/util/run'
+
 Obfusk::Util.spawn_w(*%w{ some command }, env: { 'FOO' => 'bar' },
   chdir: 'some/dir') #, ...
 # => $?
@@ -151,9 +187,13 @@ end
 
 []: }}}2
 
+---
+
 []: {{{2
 
 ```ruby
+require 'obfusk/util/spec'
+
 Obfusk::Util.provide_stdin(input) do
   # do something with $stdin
 end
@@ -169,9 +209,13 @@ end
 
 []: }}}2
 
+---
+
 []: {{{2
 
 ```ruby
+require 'obfusk/util/struct'
+
 Foo = Obfusk::Util.struct(*%w{ field1 field2 field3 }) do
   def some_method; field1 + field2; end
 end
@@ -191,9 +235,13 @@ bar.check!        # => IncompleteError b/c there are empty fields
 
 []: }}}2
 
+---
+
 []: {{{2
 
 ```ruby
+require 'obfusk/util/term'
+
 Obfusk::Util::Term.colour :red
 # => ansi escape code if $stdout is a tty, '' otherwise
 
@@ -208,9 +256,13 @@ Obfusk::Util::Term.prompt 'foo> ', :hide  # prompt for password
 
 []: }}}2
 
+---
+
 []: {{{2
 
 ```ruby
+require 'obfusk/util/valid'
+
 def foo(*args_)
   Obfusk::Util::Valid.args 'description', args_, 1, 3
   # => ArgumentError if #args not in 1..3
@@ -222,37 +274,24 @@ end
 []: }}}1
 
 ## Specs & Docs
-[]: {{{1
 
-    $ rake spec
-    $ rake docs
-
-[]: }}}1
+```bash
+$ rake spec
+$ rake docs
+```
 
 ## TODO
-[]: {{{1
 
   * more specs/docs?
   * ...
 
-[]: }}}1
-
 ## License
-[]: {{{1
 
-  GPLv2 [1] or EPLv1 [2].
-
-[]: }}}1
+  LGPLv3+ [1].
 
 ## References
-[]: {{{1
 
-  [1] GNU General Public License, version 2
-  --- http://www.opensource.org/licenses/GPL-2.0
-
-  [2] Eclipse Public License, version 1
-  --- http://www.opensource.org/licenses/EPL-1.0
-
-[]: }}}1
+  [1] GNU Lesser General Public License, version 3
+  --- http://www.gnu.org/licenses/lgpl-3.0.html
 
 []: ! ( vim: set tw=70 sw=2 sts=2 et fdm=marker : )

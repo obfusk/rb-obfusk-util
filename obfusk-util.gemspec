@@ -7,8 +7,6 @@ Gem::Specification.new do |s|
 
   s.description = <<-END.gsub(/^ {4}/, '')
     miscellaneous utility library for ruby
-
-    ...
   END
 
   s.version     = Obfusk::Util::VERSION
@@ -17,7 +15,7 @@ Gem::Specification.new do |s|
   s.authors     = [ 'Felix C. Stegerman' ]
   s.email       = %w{ flx@obfusk.net }
 
-  s.licenses    = %w{ GPLv2 EPLv1 }
+  s.licenses    = %w{ LGPLv3+ }
 
   s.files       = %w{ .yardopts README.md Rakefile } \
                 + %w{ obfusk-util.gemspec } \
