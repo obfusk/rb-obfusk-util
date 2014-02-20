@@ -53,6 +53,90 @@ module Obfusk; module Util
 
   # --
 
+  # better Open3.capture2; see capture3
+  # @raise RunError on ENOENT
+  def self.capture2(*args)
+    _enoent_to_run('capture2', args) do |a|
+      Open3.capture2(*_spawn_args(*a))
+    end
+  end
+
+  # better Open3.capture2e; see capture3
+  # @raise RunError on ENOENT
+  def self.capture2e(*args)
+    _enoent_to_run('capture2e', args) do |a|
+      Open3.capture2e(*_spawn_args(*a))
+    end
+  end
+
+  # better Open3.capture3; see popen3
+  # @raise RunError on ENOENT
+  def self.capture3(*args)
+    _enoent_to_run('capture3', args) do |a|
+      Open3.capture3(*_spawn_args(*a))
+    end
+  end
+
+  # --
+
+  # better Open3.pipeline; see exec, popen3
+  # @raise RunError on ENOENT
+  def self.pipeline(*args)
+    _enoent_to_run('pipeline', args) do |a|
+      Open3.pipeline(*_pipeline_args(*a))
+    end
+  end
+
+  # better Open3.pipeline_r; see pipeline_rw
+  # @raise RunError on ENOENT
+  def self.pipeline_r(*args, &b)
+    _enoent_to_run('pipeline_r', args) do |a|
+      Open3.pipeline_r(*_pipeline_args(*a), &b)
+    end
+  end
+
+  # better Open3.pipeline_rw; see popen3
+  # @raise RunError on ENOENT
+  def self.pipeline_rw(*args, &b)
+    _enoent_to_run('pipeline_rw', args) do |a|
+      Open3.pipeline_rw(*_pipeline_args(*a), &b)
+    end
+  end
+
+  # better Open3.pipeline_start; see popen3
+  # @raise RunError on ENOENT
+  def self.pipeline_start(*args, &b)
+    _enoent_to_run('pipeline_start', args) do |a|
+      Open3.pipeline_start(*_pipeline_args(*a), &b)
+    end
+  end
+
+  # better Open3.pipeline_w; see pipeline_rw
+  # @raise RunError on ENOENT
+  def self.pipeline_w(*args, &b)
+    _enoent_to_run('pipeline_w', args) do |a|
+      Open3.pipeline_w(*_pipeline_args(*a), &b)
+    end
+  end
+
+  # --
+
+  # better Open3.popen2; see popen3
+  # @raise RunError on ENOENT
+  def self.popen2(*args, &b)
+    _enoent_to_run('popen2', args) do |a|
+      Open3.popen2(*_spawn_args(*a), &b)
+    end
+  end
+
+  # better Open3.popen2e; see popen3
+  # @raise RunError on ENOENT
+  def self.popen2e(*args, &b)
+    _enoent_to_run('popen2e', args) do |a|
+      Open3.popen2e(*_spawn_args(*a), &b)
+    end
+  end
+
   # better Open3.popen3; see exec, spawn, spawn_w, system
   # @raise RunError on ENOENT
   def self.popen3(*args, &b)
@@ -111,6 +195,15 @@ module Obfusk; module Util
       [e, c] + args[0..-2] + [l]
     else
       [c] + args
+    end
+  end                                                           # }}}1
+
+  # helper
+  def self._pipeline_args(*args)                                # {{{1
+    if args.last && (l = args.last.dup).is_a?(Hash)
+      args[0..-2].map { |c| _spawn_args(*c) } + [l]
+    else
+      args.map { |c| _spawn_args(*c) }
     end
   end                                                           # }}}1
 

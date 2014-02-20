@@ -5,7 +5,7 @@
     Date        : 2014-02-19
 
     Copyright   : Copyright (C) 2014  Felix C. Stegerman
-    Version     : v0.4.0
+    Version     : v0.4.1
 
 []: }}}1
 
@@ -171,7 +171,8 @@ Obfusk::Util::Process.alive? pid  # => false/true/:not_mine
 `spawn_w` is `spawn` + `wait` (which is nicer than `system`).  No
 shell is ever used; `env` is an option instead of an optional first
 argument; `ENOENT` becomes `RunError`.  See also: `exec`, `spawn`,
-`system`, `popen3`.
+`system`, `capture{2,2e,3}`, `pipeline{,_r,_rw,_start,_w}`,
+`popen{2,2e,3}`.
 
 ```ruby
 require 'obfusk/util/run'

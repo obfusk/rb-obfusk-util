@@ -78,10 +78,166 @@ describe 'obfusk/util/run' do
     end
   end                                                           # }}}1
 
+  context 'capture2' do                                         # {{{1
+    it 'succeed' do
+      o, s = ou.capture2 'bash', '-c', 'echo $FOO',
+        env: { 'FOO' => 'foo' }
+      expect(s.exitstatus).to eq(0)
+      expect(o).to eq("foo\n")
+    end
+    it 'fail (no shell)' do
+      expect { ou.capture2 'echo THIS IS NOT A COMMAND' } .to \
+        raise_error(ou::RunError, /No such file or directory/)  # ????
+    end
+  end                                                           # }}}1
+
+  context 'capture2e' do                                        # {{{1
+    it 'succeed' do
+      oe, s = ou.capture2e 'bash', '-c', 'echo $FOO >&2; pwd',
+        env: { 'FOO' => 'foo' }, chdir: '/'
+      expect(s.exitstatus).to eq(0)
+      expect(oe).to eq("foo\n/\n")
+    end
+    it 'fail (no shell)' do
+      expect { ou.capture2e 'echo THIS IS NOT A COMMAND' } .to \
+        raise_error(ou::RunError, /No such file or directory/)  # ????
+    end
+  end                                                           # }}}1
+
+  context 'capture3' do                                         # {{{1
+    it 'succeed' do
+      o, e, s = ou.capture3 'bash', '-c', 'echo $FOO >&2; pwd',
+        env: { 'FOO' => 'foo' }, chdir: '/'
+      expect(s.exitstatus).to eq(0)
+      expect(o).to eq("/\n")
+      expect(e).to eq("foo\n")
+    end
+    it 'fail (no shell)' do
+      expect { ou.capture3 'echo THIS IS NOT A COMMAND' } .to \
+        raise_error(ou::RunError, /No such file or directory/)  # ????
+    end
+  end                                                           # }}}1
+
+  context 'pipeline' do                                         # {{{1
+    it 'succeed' do
+      ri, wi  = IO.pipe; wi.puts %w{ foo bar baz foo }; wi.close
+      ro, wo  = IO.pipe
+      ss      = ou.pipeline ['sort'], %w{ uniq -c }, in: ri, out: wo;
+                wo.close
+      o       = ro.read; ro.close; ri.close
+      expect(ss.length).to eq(2)
+      expect(ss[0].exitstatus).to eq(0)
+      expect(ss[1].exitstatus).to eq(0)
+      expect(o).to match(/\A +1 bar\n +1 baz\n +2 foo\n\z/)
+    end
+    it 'fail (no shell)' do
+      expect { ou.pipeline ['echo THIS IS NOT A COMMAND'] } .to \
+        raise_error(ou::RunError, /No such file or directory/)  # ????
+    end
+  end                                                           # }}}1
+
+  context 'pipeline_r' do                                       # {{{1
+    it 'succeed' do
+      ri, wi = IO.pipe; wi.puts %w{ foo bar baz foo }; wi.close
+      ou.pipeline_r(['sort'], %w{ uniq -c }, in: ri) do |o,ts|
+        expect(ts.length).to eq(2)
+        expect(ts[0].value.exitstatus).to eq(0)
+        expect(ts[1].value.exitstatus).to eq(0)
+        expect(o.read).to match(/\A +1 bar\n +1 baz\n +2 foo\n\z/)
+      end
+    end
+    it 'fail (no shell)' do
+      expect { ou.pipeline_r ['echo THIS IS NOT A COMMAND'] } .to \
+        raise_error(ou::RunError, /No such file or directory/)  # ????
+    end
+  end                                                           # }}}1
+
+  context 'pipeline_rw' do                                      # {{{1
+    it 'succeed' do
+      ou.pipeline_rw(['sort'], %w{ uniq -c }) do |i,o,ts|
+        i.puts %w{ foo bar baz foo }; i.close
+        expect(ts.length).to eq(2)
+        expect(ts[0].value.exitstatus).to eq(0)
+        expect(ts[1].value.exitstatus).to eq(0)
+        expect(o.read).to match(/\A +1 bar\n +1 baz\n +2 foo\n\z/)
+      end
+    end
+    it 'fail (no shell)' do
+      expect { ou.pipeline_rw ['echo THIS IS NOT A COMMAND'] } .to \
+        raise_error(ou::RunError, /No such file or directory/)  # ????
+    end
+  end                                                           # }}}1
+
+  context 'pipeline_start' do                                   # {{{1
+    it 'succeed' do
+      ri, wi = IO.pipe; wi.puts %w{ foo bar baz foo }; wi.close
+      ro, wo = IO.pipe
+      ou.pipeline_start(['sort'], %w{ uniq -c }, in: ri, out: wo) do |ts|
+        expect(ts.length).to eq(2)
+        expect(ts[0].value.exitstatus).to eq(0)
+        expect(ts[1].value.exitstatus).to eq(0)
+      end
+      wo.close; o = ro.read; ro.close; ri.close
+      expect(o).to match(/\A +1 bar\n +1 baz\n +2 foo\n\z/)
+    end
+    it 'fail (no shell)' do
+      expect { ou.pipeline_start ['echo THIS IS NOT A COMMAND'] } .to \
+        raise_error(ou::RunError, /No such file or directory/)  # ????
+    end
+  end                                                           # }}}1
+
+  context 'pipeline_w' do                                       # {{{1
+    it 'succeed' do
+      ro, wo = IO.pipe
+      ou.pipeline_w(['sort'], %w{ uniq -c }, out: wo) do |i,ts|
+        i.puts %w{ foo bar baz foo }; i.close
+        expect(ts.length).to eq(2)
+        expect(ts[0].value.exitstatus).to eq(0)
+        expect(ts[1].value.exitstatus).to eq(0)
+      end
+      wo.close; o = ro.read; ro.close
+      expect(o).to match(/\A +1 bar\n +1 baz\n +2 foo\n\z/)
+    end
+    it 'fail (no shell)' do
+      expect { ou.pipeline_w ['echo THIS IS NOT A COMMAND'] } .to \
+        raise_error(ou::RunError, /No such file or directory/)  # ????
+    end
+  end                                                           # }}}1
+
+  context 'popen2' do                                           # {{{1
+    it 'succeed' do
+      ou.popen2 'bash', '-c', 'echo $FOO',
+          env: { 'FOO' => 'foo' } do |i,o,t|
+        i.close
+        t.value.exitstatus.should == 0
+        o.read.should == "foo\n"
+      end
+    end
+    it 'fail (no shell)' do
+      expect { ou.popen2 'echo THIS IS NOT A COMMAND' } .to \
+        raise_error(ou::RunError, /No such file or directory/)  # ????
+    end
+  end                                                           # }}}1
+
+  context 'popen2e' do                                          # {{{1
+    it 'succeed' do
+      ou.popen2e 'bash', '-c', 'echo $FOO >&2; pwd',
+          env: { 'FOO' => 'foo' }, chdir: '/' do |i,oe,t|
+        i.close
+        t.value.exitstatus.should == 0
+        oe.read.should == "foo\n/\n"
+      end
+    end
+    it 'fail (no shell)' do
+      expect { ou.popen2e 'echo THIS IS NOT A COMMAND' } .to \
+        raise_error(ou::RunError, /No such file or directory/)  # ????
+    end
+  end                                                           # }}}1
+
   context 'popen3' do                                           # {{{1
     it 'succeed' do
       ou.popen3 'bash', '-c', 'echo $FOO >&2; pwd',
-                env: { 'FOO' => 'foo' }, chdir: '/' do |i,o,e,t|
+          env: { 'FOO' => 'foo' }, chdir: '/' do |i,o,e,t|
         i.close
         t.value.exitstatus.should == 0
         o.read.should == "/\n"
