@@ -65,9 +65,9 @@ module Obfusk; module Util
     c     = [shell] + (print ? %w{-x} : []) + (exit ? %w{-e} : []) +
               ['-c', cmd, shell] + a
     if merge
-      stderr = nil; stdout, status = capture2e *c, opts
+      stderr = nil; stdout, status = capture2e(*c, opts)
     else
-      stdout, stderr, status = capture3 *c, opts
+      stdout, stderr, status = capture3(*c, opts)
     end
     Sh.new c, status, stdout, stderr
   end                                                           # }}}1
