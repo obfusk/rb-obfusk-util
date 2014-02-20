@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/sh_spec.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-02-19
+# Date        : 2014-02-20
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -111,8 +111,8 @@ describe 'obfusk/util/sh' do
   end                                                           # }}}1
 
   context 'sh!' do                                              # {{{1
-    it 'true => nil' do
-      expect( ou.sh! 'true' ).to eq(nil)
+    it 'true => Sh' do
+      expect( ou.sh! 'true' ).to be_an_instance_of(ou::Sh)
     end
     it 'false => RunError' do
       expect { ou.sh! 'false' } .to \

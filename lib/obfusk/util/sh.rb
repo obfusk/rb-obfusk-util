@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/sh.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-02-19
+# Date        : 2014-02-20
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -23,8 +23,10 @@ module Obfusk; module Util
     end
 
     # @raise RunError when exitstatus non-zero
+    # @return [Sh] self
     def ok!
       ::Obfusk::Util.chk_exitstatus cmd, status.exitstatus
+      self
     end
 
     # ... TODO ...
