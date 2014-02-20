@@ -5,7 +5,7 @@
     Date        : 2014-02-20
 
     Copyright   : Copyright (C) 2014  Felix C. Stegerman
-    Version     : v0.4.3
+    Version     : v0.4.4
 
 []: }}}1
 
@@ -210,6 +210,14 @@ Obfusk::Util::sh? 'false'
 
 Obfusk::Util::sh! 'false'
 # => RunError
+
+Obfusk::Util::sys 'echo "$0" ">>$1<<" ">>$FOO<<"', '"one"', 'FOO' => 'foo'
+# stdout: bash >>"one"<< >>foo<<
+
+Obfusk::Util::sys! 'echo FOO; false'
+# stdout: FOO
+# => RunError
+
 ```
 
 []: }}}2
