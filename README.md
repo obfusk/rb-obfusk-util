@@ -197,17 +197,18 @@ end
 ```ruby
 require 'obfusk/util/sh'
 
-sh('echo "$0" ">>$1<<" ">>$FOO<<"', '"one"', 'FOO' => 'foo').stdout
+Obfusk::Util::sh('echo "$0" ">>$1<<" ">>$FOO<<"',
+  '"one"', 'FOO' => 'foo').stdout
 # => %Q{bash >>"one"<< >>foo<<}
 
-sh('echo step1; false; echo step3',
+Obfusk::Util::sh('echo step1; false; echo step3',
   print: true, exit: true, merge: true).stdout
 # => "+ echo step1\nstep1\n+ false\n"
 
-sh? 'false'
+Obfusk::Util::sh? 'false'
 # => false
 
-sh! 'false'
+Obfusk::Util::sh! 'false'
 # => RunError
 ```
 
