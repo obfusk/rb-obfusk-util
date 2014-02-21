@@ -17,87 +17,100 @@ describe 'obfusk/util/sh' do
 
   context 'sh (1)' do                                           # {{{1
     it 'echoes w/ args and env' do
-      r = ou.sh 'echo "$0" ">>$1<<" ">>$FOO<<"', '"one"',
-        'FOO' => 'foo'
-      expect(r.ok?).to eq(true)
-      expect(r.stdout).to eq(%Q{bash >>"one"<< >>foo<<\n})
-      expect(r.stderr).to eq('')
+      r, w = IO.pipe
+      res = ou.sh 'echo "$0" ">>$1<<" ">>$FOO<<"', '"one"',
+        'FOO' => 'foo', out: w
+      w.close; x = r.read; r.close
+      expect(res.ok?).to eq(true)
+      expect(x).to eq(%Q{bash >>"one"<< >>foo<<\n})
     end
     it 'works w/ print, exit, and merge' do
-      r = ou.sh 'echo step1; false; echo step3', print: true, exit: true,
-        merge: true
-      expect(r.ok?).to eq(false)
-      expect(r.stdout).to eq("+ echo step1\nstep1\n+ false\n")
-      expect(r.stderr).to eq(nil)
+      r, w = IO.pipe
+      res = ou.sh 'echo step1; false; echo step3', print: true, exit: true,
+        merge: true, out: w
+      w.close; x = r.read; r.close
+      expect(res.ok?).to eq(false)
+      expect(x).to eq("+ echo step1\nstep1\n+ false\n")
     end
     it 'outputs pwd w/ arg' do
-      r = ou.sh 'cd "$1"; pwd', '/'
-      expect(r.ok?).to eq(true)
-      expect(r.stdout).to eq("/\n")
-      expect(r.stderr).to eq('')
+      r, w = IO.pipe
+      res = ou.sh 'cd "$1"; pwd', '/', out: w
+      w.close; x = r.read; r.close
+      expect(res.ok?).to eq(true)
+      expect(x).to eq("/\n")
     end
     it 'outputs pwd w/ :chdir' do
-      r = ou.sh 'pwd', chdir: '/'
-      expect(r.ok?).to eq(true)
-      expect(r.stdout).to eq("/\n")
-      expect(r.stderr).to eq('')
+      r, w = IO.pipe
+      res = ou.sh 'pwd', chdir: '/', out: w
+      w.close; x = r.read; r.close
+      expect(res.ok?).to eq(true)
+      expect(x).to eq("/\n")
     end
   end                                                           # }}}1
 
   context 'sh (2)' do                                           # {{{1
     it 'prints to stderr w/ print/-x' do
-      r = ou.sh 'echo FOO; echo BAR', print: true
-      expect(r.ok?).to eq(true)
-      expect(r.stdout).to eq("FOO\nBAR\n")
-      expect(r.stderr).to eq("+ echo FOO\n+ echo BAR\n")
+      ro, wo = IO.pipe; re, we = IO.pipe
+      res = ou.sh 'echo FOO; echo BAR', print: true, out: wo, err: we
+      wo.close; o = ro.read; ro.close
+      we.close; e = re.read; re.close
+      expect(res.ok?).to eq(true)
+      expect(o).to eq("FOO\nBAR\n")
+      expect(e).to eq("+ echo FOO\n+ echo BAR\n")
     end
     it 'ignores false w/o exit/-e' do
-      r = ou.sh 'echo FOO; false; echo BAR'
-      expect(r.ok?).to eq(true)
-      expect(r.stdout).to eq("FOO\nBAR\n")
-      expect(r.stderr).to eq('')
+      r, w = IO.pipe
+      res = ou.sh 'echo FOO; false; echo BAR', out: w
+      w.close; x = r.read; r.close
+      expect(res.ok?).to eq(true)
+      expect(x).to eq("FOO\nBAR\n")
     end
     it 'stops at false w/ exit/-e' do
-      r = ou.sh 'echo FOO; false; echo BAR', exit: true
-      expect(r.ok?).to eq(false)
-      expect(r.stdout).to eq("FOO\n")
-      expect(r.stderr).to eq('')
+      r, w = IO.pipe
+      res = ou.sh 'echo FOO; false; echo BAR', exit: true, out: w
+      w.close; x = r.read; r.close
+      expect(res.ok?).to eq(false)
+      expect(x).to eq("FOO\n")
     end
     it 'merges stdout and stderr w/ merge' do
-      r = ou.sh 'echo FOO; echo BAR >&2; echo BAZ', merge: true
-      expect(r.ok?).to eq(true)
-      expect(r.stdout).to eq("FOO\nBAR\nBAZ\n")
-      expect(r.stderr).to eq(nil)
+      r, w = IO.pipe
+      res = ou.sh 'echo FOO; echo BAR >&2; echo BAZ', merge: true, out: w
+      w.close; x = r.read; r.close
+      expect(res.ok?).to eq(true)
+      expect(x).to eq("FOO\nBAR\nBAZ\n")
     end
     it 'merges env w/ string keys' do
-      r = ou.sh 'echo $FOO; echo $BAR',
-        env: { 'FOO' => 'no', 'BAR' => 'bar' }, 'FOO' => 'yes'
-      expect(r.ok?).to eq(true)
-      expect(r.stdout).to eq("yes\nbar\n")
-      expect(r.stderr).to eq('')
+      r, w = IO.pipe
+      res = ou.sh 'echo $FOO; echo $BAR',
+        env: { 'FOO' => 'no', 'BAR' => 'bar' }, 'FOO' => 'yes', out: w
+      w.close; x = r.read; r.close
+      expect(res.ok?).to eq(true)
+      expect(x).to eq("yes\nbar\n")
     end
   end                                                           # }}}1
 
   context 'sh (3)' do                                           # {{{1
     it 'false => ok? returns false and ok! raises' do
-      r = ou.sh 'false'
-      expect(r.ok?).to eq(false)
-      expect(r.status.exitstatus).to eq(1)
-      expect { r.ok! } .to \
+      r, w = IO.pipe
+      res = ou.sh 'false', out: w
+      w.close; x = r.read; r.close
+      expect(res.ok?).to eq(false)
+      expect(res.status.exitstatus).to eq(1)
+      expect { res.ok! } .to \
         raise_error(ou::RunError, /command returned non-zero/)
-      expect(r.stdout).to eq('')
-      expect(r.stderr).to eq('')
+      expect(x).to eq('')
     end
     it 'fails w/ message on stderr w/ NONEXISTENT' do
-      r = ou.sh 'NONEXISTENT'
-      expect(r.ok?).to eq(false)
-      expect(r.status.exitstatus).to eq(127)
-      expect(r.stdout).to eq('')
-      expect(r.stderr).to eq("bash: NONEXISTENT: command not found\n")
+      r, w = IO.pipe
+      res = ou.sh 'NONEXISTENT', err: w
+      w.close; x = r.read; r.close
+      expect(res.ok?).to eq(false)
+      expect(res.status.exitstatus).to eq(127)
+      expect(x).to eq("bash: NONEXISTENT: command not found\n")
     end
     it 'fails w/ RunError w/ shell NONEXISTENT' do
       expect { ou.sh 'irrelevant', shell: 'NONEXISTENT' } .to \
-        raise_error(ou::RunError, /failed to capture3 command/)
+        raise_error(ou::RunError, /failed to spawn command/)
     end
   end                                                           # }}}1
 
@@ -120,109 +133,107 @@ describe 'obfusk/util/sh' do
     end
   end                                                           # }}}1
 
-  context 'sys (1)' do                                          # {{{1
+  context 'shc (1)' do                                          # {{{1
     it 'echoes w/ args and env' do
-      r, w = IO.pipe
-      res = ou.sys 'echo "$0" ">>$1<<" ">>$FOO<<"', '"one"',
-        'FOO' => 'foo', out: w
-      w.close; x = r.read; r.close
-      expect(res.exitstatus).to eq(0)
-      expect(x).to eq(%Q{bash >>"one"<< >>foo<<\n})
+      r = ou.shc 'echo "$0" ">>$1<<" ">>$FOO<<"', '"one"',
+        'FOO' => 'foo'
+      expect(r.ok?).to eq(true)
+      expect(r.stdout).to eq(%Q{bash >>"one"<< >>foo<<\n})
+      expect(r.stderr).to eq('')
     end
     it 'works w/ print, exit, and merge' do
-      r, w = IO.pipe
-      res = ou.sys 'echo step1; false; echo step3', print: true, exit: true,
-        merge: true, out: w
-      w.close; x = r.read; r.close
-      expect(res.exitstatus).to_not eq(0)
-      expect(x).to eq("+ echo step1\nstep1\n+ false\n")
+      r = ou.shc 'echo step1; false; echo step3', print: true, exit: true,
+        merge: true
+      expect(r.ok?).to eq(false)
+      expect(r.stdout).to eq("+ echo step1\nstep1\n+ false\n")
+      expect(r.stderr).to eq(nil)
     end
     it 'outputs pwd w/ arg' do
-      r, w = IO.pipe
-      res = ou.sys 'cd "$1"; pwd', '/', out: w
-      w.close; x = r.read; r.close
-      expect(res.exitstatus).to eq(0)
-      expect(x).to eq("/\n")
+      r = ou.shc 'cd "$1"; pwd', '/'
+      expect(r.ok?).to eq(true)
+      expect(r.stdout).to eq("/\n")
+      expect(r.stderr).to eq('')
     end
     it 'outputs pwd w/ :chdir' do
-      r, w = IO.pipe
-      res = ou.sys 'pwd', chdir: '/', out: w
-      w.close; x = r.read; r.close
-      expect(res.exitstatus).to eq(0)
-      expect(x).to eq("/\n")
+      r = ou.shc 'pwd', chdir: '/'
+      expect(r.ok?).to eq(true)
+      expect(r.stdout).to eq("/\n")
+      expect(r.stderr).to eq('')
     end
   end                                                           # }}}1
 
-  context 'sys (2)' do                                          # {{{1
+  context 'shc (2)' do                                          # {{{1
     it 'prints to stderr w/ print/-x' do
-      ro, wo = IO.pipe; re, we = IO.pipe
-      res = ou.sys 'echo FOO; echo BAR', print: true, out: wo, err: we
-      wo.close; o = ro.read; ro.close
-      we.close; e = re.read; re.close
-      expect(res.exitstatus).to eq(0)
-      expect(o).to eq("FOO\nBAR\n")
-      expect(e).to eq("+ echo FOO\n+ echo BAR\n")
+      r = ou.shc 'echo FOO; echo BAR', print: true
+      expect(r.ok?).to eq(true)
+      expect(r.stdout).to eq("FOO\nBAR\n")
+      expect(r.stderr).to eq("+ echo FOO\n+ echo BAR\n")
     end
     it 'ignores false w/o exit/-e' do
-      r, w = IO.pipe
-      res = ou.sys 'echo FOO; false; echo BAR', out: w
-      w.close; x = r.read; r.close
-      expect(res.exitstatus).to eq(0)
-      expect(x).to eq("FOO\nBAR\n")
+      r = ou.shc 'echo FOO; false; echo BAR'
+      expect(r.ok?).to eq(true)
+      expect(r.stdout).to eq("FOO\nBAR\n")
+      expect(r.stderr).to eq('')
     end
     it 'stops at false w/ exit/-e' do
-      r, w = IO.pipe
-      res = ou.sys 'echo FOO; false; echo BAR', exit: true, out: w
-      w.close; x = r.read; r.close
-      expect(res.exitstatus).to_not eq(0)
-      expect(x).to eq("FOO\n")
+      r = ou.shc 'echo FOO; false; echo BAR', exit: true
+      expect(r.ok?).to eq(false)
+      expect(r.stdout).to eq("FOO\n")
+      expect(r.stderr).to eq('')
     end
     it 'merges stdout and stderr w/ merge' do
-      r, w = IO.pipe
-      res = ou.sys 'echo FOO; echo BAR >&2; echo BAZ', merge: true, out: w
-      w.close; x = r.read; r.close
-      expect(res.exitstatus).to eq(0)
-      expect(x).to eq("FOO\nBAR\nBAZ\n")
+      r = ou.shc 'echo FOO; echo BAR >&2; echo BAZ', merge: true
+      expect(r.ok?).to eq(true)
+      expect(r.stdout).to eq("FOO\nBAR\nBAZ\n")
+      expect(r.stderr).to eq(nil)
     end
     it 'merges env w/ string keys' do
-      r, w = IO.pipe
-      res = ou.sys 'echo $FOO; echo $BAR',
-        env: { 'FOO' => 'no', 'BAR' => 'bar' }, 'FOO' => 'yes', out: w
-      w.close; x = r.read; r.close
-      expect(res.exitstatus).to eq(0)
-      expect(x).to eq("yes\nbar\n")
+      r = ou.shc 'echo $FOO; echo $BAR',
+        env: { 'FOO' => 'no', 'BAR' => 'bar' }, 'FOO' => 'yes'
+      expect(r.ok?).to eq(true)
+      expect(r.stdout).to eq("yes\nbar\n")
+      expect(r.stderr).to eq('')
     end
   end                                                           # }}}1
 
-  context 'sys (3)' do                                          # {{{1
+  context 'shc (3)' do                                          # {{{1
+    it 'false => ok? returns false and ok! raises' do
+      r = ou.shc 'false'
+      expect(r.ok?).to eq(false)
+      expect(r.status.exitstatus).to eq(1)
+      expect { r.ok! } .to \
+        raise_error(ou::RunError, /command returned non-zero/)
+      expect(r.stdout).to eq('')
+      expect(r.stderr).to eq('')
+    end
     it 'fails w/ message on stderr w/ NONEXISTENT' do
-      r, w = IO.pipe
-      res = ou.sys 'NONEXISTENT', err: w
-      w.close; x = r.read; r.close
-      expect(res.exitstatus).to eq(127)
-      expect(x).to eq("bash: NONEXISTENT: command not found\n")
+      r = ou.shc 'NONEXISTENT'
+      expect(r.ok?).to eq(false)
+      expect(r.status.exitstatus).to eq(127)
+      expect(r.stdout).to eq('')
+      expect(r.stderr).to eq("bash: NONEXISTENT: command not found\n")
     end
     it 'fails w/ RunError w/ shell NONEXISTENT' do
-      expect { ou.sys 'irrelevant', shell: 'NONEXISTENT' } .to \
-        raise_error(ou::RunError, /failed to spawn command/)
+      expect { ou.shc 'irrelevant', shell: 'NONEXISTENT' } .to \
+        raise_error(ou::RunError, /failed to capture3 command/)
     end
   end                                                           # }}}1
 
-  context 'sys?' do                                             # {{{1
+  context 'shc?' do                                             # {{{1
     it 'true => true' do
-      expect(ou.sys? 'true').to eq(true)
+      expect(ou.shc? 'true').to eq(true)
     end
     it 'false => false' do
-      expect(ou.sys? 'false').to eq(false)
+      expect(ou.shc? 'false').to eq(false)
     end
   end                                                           # }}}1
 
-  context 'sys!' do                                             # {{{1
-    it 'true => Process::Status' do
-      expect( ou.sys! 'true' ).to be_an_instance_of(Process::Status)
+  context 'shc!' do                                             # {{{1
+    it 'true => Shc' do
+      expect( ou.shc! 'true' ).to be_an_instance_of(ou::Shc)
     end
     it 'false => RunError' do
-      expect { ou.sys! 'false' } .to \
+      expect { ou.shc! 'false' } .to \
         raise_error(ou::RunError, /command returned non-zero/)
     end
   end                                                           # }}}1

@@ -5,7 +5,7 @@
     Date        : 2014-02-20
 
     Copyright   : Copyright (C) 2014  Felix C. Stegerman
-    Version     : v0.4.4
+    Version     : v0.5.0
 
 []: }}}1
 
@@ -197,25 +197,28 @@ end
 ```ruby
 require 'obfusk/util/sh'
 
-Obfusk::Util::sh('echo "$0" ">>$1<<" ">>$FOO<<"',
-  '"one"', 'FOO' => 'foo').stdout
-# => %Q{bash >>"one"<< >>foo<<}
-
-Obfusk::Util::sh('echo step1; false; echo step3',
-  print: true, exit: true, merge: true).stdout
-# => "+ echo step1\nstep1\n+ false\n"
+Obfusk::Util::sh 'echo "$0" ">>$1<<" ">>$FOO<<"', '"one"', 'FOO' => 'foo'
+# stdout: bash >>"one"<< >>foo<<
 
 Obfusk::Util::sh? 'false'
 # => false
 
-Obfusk::Util::sh! 'false'
+Obfusk::Util::sh! 'echo FOO; false'
+# stdout: FOO
 # => RunError
 
-Obfusk::Util::sys 'echo "$0" ">>$1<<" ">>$FOO<<"', '"one"', 'FOO' => 'foo'
-# stdout: bash >>"one"<< >>foo<<
+Obfusk::Util::shc('echo "$0" ">>$1<<" ">>$FOO<<"',
+  '"one"', 'FOO' => 'foo').stdout
+# => %Q{bash >>"one"<< >>foo<<}
 
-Obfusk::Util::sys! 'echo FOO; false'
-# stdout: FOO
+Obfusk::Util::shc('echo step1; false; echo step3',
+  print: true, exit: true, merge: true).stdout
+# => "+ echo step1\nstep1\n+ false\n"
+
+Obfusk::Util::shc? 'false'
+# => false
+
+Obfusk::Util::shc! 'false'
 # => RunError
 
 ```

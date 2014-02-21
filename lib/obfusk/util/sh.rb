@@ -14,8 +14,8 @@ require 'obfusk/util/run'
 # my namespace
 module Obfusk; module Util
 
-  # shell command result
-  class Sh < Struct.new(:cmd, :status, :stdout, :stderr)        # {{{1
+  # common methods for Sh, Shc
+  module ShBase                                                 # {{{1
 
     # was the exitstatus zero?
     def ok?
@@ -32,14 +32,24 @@ module Obfusk; module Util
 
   end                                                           # }}}1
 
+  # shell result
+  class Sh < Struct.new(:cmd, :status)
+    include ShBase
+  end
+
+  # shell capture result
+  class Shc < Struct.new(:cmd, :status, :stdout, :stderr)
+    include ShBase
+  end
+
   # --
 
-  # run a command using bash (w/ arguments) and capture its output;
-  # see also `sys`; uses `capture{2e,3}`
+  # run a command using bash (w/ arguments); see also {shc}; uses
+  # {spawn_w}
   #
   # ```
-  # sh('echo "$0" ">>$1<<" ">>$FOO<<"', '"one"', 'FOO' => 'foo').stdout
-  # # => %Q{bash >>"one"<< >>foo<<}
+  # sh 'echo "$0" ">>$1<<" ">>$FOO<<"', '"one"', 'FOO' => 'foo'
+  # # stdout: bash >>"one"<< >>foo<<
   # ```
   #
   # @param [Hash] args.last
@@ -51,15 +61,11 @@ module Obfusk; module Util
   #   * any other `String` key is added to the `env`
   #   * any other `Symbol` key is passed as an option to `capture3`
   # @return [Sh]
-  def self.sh(cmd, *args)                                       # {{{1
-    c = _sh cmd, args
-    if c[:merge]
-      stderr = nil; stdout, status = capture2e(*c[:cmd], c[:opts])
-    else
-      stdout, stderr, status = capture3(*c[:cmd], c[:opts])
-    end
-    Sh.new c[:cmd], status, stdout, stderr
-  end                                                           # }}}1
+  def self.sh(cmd, *args)
+    c   = _sh cmd, args; o = c[:opts]
+    o_  = c[:merge] ? o.merge(:err => o[:out] ? [:child, :out] : :out) : o
+    Sh.new c[:cmd], spawn_w(*c[:cmd], o_)
+  end
 
   # `sh(...).ok?`
   def self.sh?(cmd, *args)
@@ -73,30 +79,33 @@ module Obfusk; module Util
 
   # --
 
-  # run a command using bash (w/ arguments); takes the same arguments
-  # as `sh`; uses `spawn_w`
+  # run a command using bash (w/ arguments) and capture its stdout and
+  # stderr; accepts the same arguments as {sh}; uses `capture{2e,3}`
   #
   # ```
-  # sys 'echo "$0" ">>$1<<" ">>$FOO<<"', '"one"', 'FOO' => 'foo'
-  # # stdout: bash >>"one"<< >>foo<<
+  # shc('echo "$0" ">>$1<<" ">>$FOO<<"', '"one"', 'FOO' => 'foo').stdout
+  # # => %Q{bash >>"one"<< >>foo<<}
   # ```
   #
-  # @return [Process::Status]
-  def self.sys(cmd, *args)
-    c   = _sh cmd, args; o = c[:opts]
-    o_  = c[:merge] ? o.merge(:err => o[:out] ? [:child, :out] : :out) : o
-    spawn_w(*c[:cmd], o_)
+  # @return [Shc]
+  def self.shc(cmd, *args)                                       # {{{1
+    c = _sh cmd, args
+    if c[:merge]
+      stderr = nil; stdout, status = capture2e(*c[:cmd], c[:opts])
+    else
+      stdout, stderr, status = capture3(*c[:cmd], c[:opts])
+    end
+    Shc.new c[:cmd], status, stdout, stderr
+  end                                                           # }}}1
+
+  # `shc(...).ok?`
+  def self.shc?(cmd, *args)
+    shc(cmd, *args).ok?
   end
 
-  # `sys(...).exitstatus == 0`
-  def self.sys?(cmd, *args)
-    sys(cmd, *args).exitstatus == 0
-  end
-
-  # `sys(...)`
-  # @raise RunError when exitstatus non-zero
-  def self.sys!(cmd, *args)
-    sys(cmd, *args).tap { |s| chk_exitstatus cmd, s.exitstatus }
+  # `shc(...).ok!`
+  def self.shc!(cmd, *args)
+    shc(cmd, *args).ok!
   end
 
   # --
@@ -118,19 +127,19 @@ module Obfusk; module Util
 
   # --
 
-  # ohai + sys; requires `obfusk/util/message`
-  def self.osys(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; sys(*args)
+  # ohai + shc; requires `obfusk/util/message`
+  def self.oshc(*args)
+    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; shc(*args)
   end
 
-  # ohai + sys?; requires `obfusk/util/message`
-  def self.osys?(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; sys?(*args)
+  # ohai + shc?; requires `obfusk/util/message`
+  def self.oshc?(*args)
+    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; shc?(*args)
   end
 
-  # ohai + sys!; requires `obfusk/util/message`
-  def self.osys!(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; sys!(*args)
+  # ohai + shc!; requires `obfusk/util/message`
+  def self.oshc!(*args)
+    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; shc!(*args)
   end
 
   # --
