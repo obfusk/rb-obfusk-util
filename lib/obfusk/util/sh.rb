@@ -110,36 +110,36 @@ module Obfusk; module Util
 
   # --
 
-  # ohai + sh; requires `obfusk/util/message`
+  # onow + sh; requires `obfusk/util/message`
   def self.osh(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; sh(*args)
+    ::Obfusk::Util.onow 'sh', *_spawn_rm_opts(args); sh(*args)
   end
 
-  # ohai + sh?; requires `obfusk/util/message`
+  # onow + sh?; requires `obfusk/util/message`
   def self.osh?(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; sh?(*args)
+    ::Obfusk::Util.onow 'sh', *_spawn_rm_opts(args); sh?(*args)
   end
 
-  # ohai + sh!; requires `obfusk/util/message`
+  # onow + sh!; requires `obfusk/util/message`
   def self.osh!(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; sh!(*args)
+    ::Obfusk::Util.onow 'sh', *_spawn_rm_opts(args); sh!(*args)
   end
 
   # --
 
-  # ohai + shc; requires `obfusk/util/message`
+  # onow + shc; requires `obfusk/util/message`
   def self.oshc(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; shc(*args)
+    ::Obfusk::Util.onow 'sh', *_spawn_rm_opts(args); shc(*args)
   end
 
-  # ohai + shc?; requires `obfusk/util/message`
+  # onow + shc?; requires `obfusk/util/message`
   def self.oshc?(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; shc?(*args)
+    ::Obfusk::Util.onow 'sh', *_spawn_rm_opts(args); shc?(*args)
   end
 
-  # ohai + shc!; requires `obfusk/util/message`
+  # onow + shc!; requires `obfusk/util/message`
   def self.oshc!(*args)
-    ::Obfusk::Util.ohai _spawn_rm_opts(args)*' '; shc!(*args)
+    ::Obfusk::Util.onow 'sh', *_spawn_rm_opts(args); shc!(*args)
   end
 
   # --
