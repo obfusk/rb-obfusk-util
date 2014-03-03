@@ -2,7 +2,7 @@
 
     File        : README.md
     Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-    Date        : 2014-02-20
+    Date        : 2014-03-03
 
     Copyright   : Copyright (C) 2014  Felix C. Stegerman
     Version     : v0.5.0
@@ -54,8 +54,22 @@ require 'obfusk/util/data'
 
 x = { x: { y: 0 }, z: [1,2,3] }
 Obfusk::Util.assoc(x, [:x,:y] => 1, [:z,1] => 99)
-x[:x][:y] == 1          # => true
-x[:z]     == [1,99,3]   # => true
+x[:x][:y] # => 1
+x[:z]     # => [1,99,3]
+
+Obfusk::Util.get_in({ x: { y: 1 } }, :x, :y)
+# => 1
+
+Obfusk::Util.symbolize_keys({ 'x' => 1, 'y' => 99 })
+# => { x: 1, y: 99 }
+
+Obfusk::Util.deep_stringify_keys({ x: { 2 => 99 } })
+# => { 'x' => { '2' => 99 } }
+
+h1  = { x: { y: 42      }, z: 11 }
+h2  = { x: { y: 1, q: 1 }, z: 1  }
+Obfusk::Util.deep_merge(h1, h2) { |k,o,n| o + n }
+# => { x: { y: 43, q: 1 }, z: 12 }
 
 y = Obfusk::Util.deepdup x
 Obfusk::Util.empty_as_nil(ENV['FOO']) || default
