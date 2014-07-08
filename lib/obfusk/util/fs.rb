@@ -2,7 +2,7 @@
 #
 # File        : obfusk/util/fs.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-02-19
+# Date        : 2014-07-07
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -21,7 +21,7 @@ module Obfusk; module Util; module FS
 
   # does file/dir or symlink exists?
   def self.exists?(path)
-    File.exists?(path) || File.symlink?(path)
+    File.exist?(path) || File.symlink?(path)
   end
 
   # ohai + mkdir_p; requires `obfusk/util/message`

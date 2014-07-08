@@ -2,14 +2,14 @@
 
     File        : README.md
     Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-    Date        : 2014-03-03
+    Date        : 2014-07-08
 
     Copyright   : Copyright (C) 2014  Felix C. Stegerman
-    Version     : v0.5.1
+    Version     : v0.5.2
 
 []: }}}1
 
-[![Gem Version](https://badge.fury.io/rb/obfusk-util.png)](http://badge.fury.io/rb/obfusk-util)
+[![Gem Version](https://badge.fury.io/rb/obfusk-util.png)](https://rubygems.org/gems/obfusk-util)
 
 ## Description
 
